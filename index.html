@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#090e1b">
-<title>F1 Strategy Engineer V51</title>
+<title>F1 Strategy Manager V51</title>
 <style>
 :root{
  --bg:#07101c;--panel:#0b1522;--panel2:#0e1a2a;--line:#26384d;
@@ -130,11 +130,50 @@ table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}td,th{p
 @media(max-width:900px){.labgrid{grid-template-columns:1fr}}
 @media(max-width:560px){.labcontrols{grid-template-columns:1fr}}
 
+
+.histbox{margin-top:12px;padding:12px;border:1px solid #26384d;border-radius:10px;background:linear-gradient(180deg,#091522,#07111c)}
+.histactions,.histselects{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.histselects{margin-top:10px}.histlist{display:grid;gap:8px;margin-top:10px}
+.histitem{border:1px solid #26384d;border-radius:9px;padding:10px;background:#08131f}
+.histtitle{font-weight:850}.histmeta{font-size:11px;color:var(--muted)}
+.histcmp{margin-top:10px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.histmetric{border:1px solid #22354a;border-radius:8px;padding:8px;background:#07111c}
+.histmetric b{display:block;margin-bottom:3px}
+.histpositive{color:var(--green);font-weight:800}.histnegative{color:#ff7b85;font-weight:800}.histneutral{color:var(--muted);font-weight:800}
+@media(max-width:700px){.histactions,.histselects,.histcmp{grid-template-columns:1fr}}
+
+/* Race Card */
+.racecardbar{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.racecardopen{width:auto;margin:0;padding:10px 14px}
+.raceoverlay{position:fixed;inset:0;z-index:9999;background:linear-gradient(180deg,#07111e,#03070d);padding:14px;overflow:auto;display:none}
+.raceoverlay.open{display:block}
+.raceinner{max-width:760px;margin:0 auto}
+.racehead{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:12px;border-bottom:1px solid #26384d}
+.racehead h2{margin:0;font-size:22px;font-style:italic}
+.raceclose{width:auto;margin:0;padding:9px 12px}
+.racetrack{font-size:13px;color:var(--muted);margin-top:3px}
+.raceplan{margin-top:14px;border:1px solid #2b3d53;border-radius:14px;padding:14px;background:linear-gradient(180deg,#0b1725,#07111c)}
+.racecompound{font-size:25px;font-weight:950;letter-spacing:.3px}
+.racearrow{text-align:center;color:var(--muted);font-size:22px;margin:5px 0}
+.racepit{border:1px solid rgba(57,217,138,.55);background:rgba(22,101,52,.12);border-radius:10px;padding:12px;text-align:center;font-size:20px;font-weight:950}
+.racestats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:12px}
+.racestat{border:1px solid #26384d;border-radius:10px;padding:10px;background:#08131f}
+.racestat .small{display:block}.racestat b{font-size:16px}
+.racelapbox{margin-top:14px;text-align:center;border:1px solid #26384d;border-radius:14px;padding:14px;background:#08131f}
+.racelapcontrols{display:grid;grid-template-columns:64px 1fr 64px;gap:9px;align-items:center;margin-top:8px}
+.racelapcontrols button{margin:0;font-size:22px;padding:12px 0}
+.racelapnum{font-size:34px;font-weight:950}
+.racemessage{margin-top:12px;padding:14px;border-radius:11px;border:1px solid #31445d;text-align:center;font-weight:950;font-size:20px}
+.racemessage.now{border-color:rgba(57,217,138,.75);color:#79e8ad;background:rgba(22,101,52,.14)}
+.racealt{margin-top:12px;border:1px solid #26384d;border-radius:10px;padding:10px;background:#08131f}
+body.racecard-active{overflow:hidden}
+@media(max-width:560px){.raceoverlay{padding:9px}.racecompound{font-size:22px}.racestats{grid-template-columns:1fr 1fr}.racehead h2{font-size:19px}}
+
 </style>
 </head>
 <body><div class="wrap">
 <div class="apphead">
-  <div class="brand"><div class="f1mark">F1</div><h1>Strategy Engineer <span class="version">V51</span></h1></div>
+  <div class="brand"><div class="f1mark">F1</div><h1>Strategy Manager <span class="version">Version 5.4 (BETA)</span></h1></div>
   <div class="tagline">Rennstrategie-Analyse · Schnell. Klar. Fundiert.</div>
   <div class="savepill">✓ Autospeichern aktiv</div>
 </div>
@@ -158,6 +197,23 @@ table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}td,th{p
   <input id="profileImportFile" type="file" accept=".json,application/json" style="display:none">
 </div>
 <div id="profileStatus" class="profilestatus">Noch kein Profil ausgewählt.</div>
+
+<div class="histbox">
+  <div class="histtitle">Entwicklungs-Historie</div>
+  <div class="histmeta">Messstände des aktuell gewählten Streckenprofils speichern und miteinander vergleichen.</div>
+  <div class="histactions">
+    <button type="button" id="historyAddBtn">MESSSTAND SPEICHERN</button>
+    <button type="button" id="historyDeleteBtn">AUSGEWÄHLTEN MESSSTAND LÖSCHEN</button>
+  </div>
+  <div class="histselects">
+    <div><label>Vergleich A</label><select id="historyA"></select></div>
+    <div><label>Vergleich B</label><select id="historyB"></select></div>
+  </div>
+  <div id="historyCompare" class="histcmp"></div>
+  <div id="historyList" class="histlist"></div>
+  <div id="historyStatus" class="small" style="margin-top:8px"></div>
+</div>
+
 
 <div class="dropboxbox">
   <div class="dropboxhead">
@@ -260,6 +316,14 @@ table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}td,th{p
 <h2>Strategie A / B / C</h2>
 <div id="strategyCards" class="strats"></div>
 <p class="small">A = schnellste sinnvolle Strategie, B = nächstschnelle Alternative, C = reifenschonendere Alternative. Die Strategie berücksichtigt Reifenverschleiß, progressiven Pace-Abbau, Boxenstopp-Verlust und die verfügbaren Reifensätze.</p>
+</div>
+
+
+<div class="card">
+  <div class="racecardbar">
+    <div><h2 style="margin:0;border:0;padding:0">Race Card</h2><div class="small">Kompakte Rennansicht der aktuell berechneten Strategie.</div></div>
+    <button type="button" class="racecardopen" id="raceCardOpen" onclick="openRaceCard()">RACE CARD ÖFFNEN</button>
+  </div>
 </div>
 
 <div class="card" id="strategyLabCard">
@@ -481,13 +545,17 @@ async function syncDropbox(){
   const remoteTombstones=remote&&remote.tombstones&&typeof remote.tombstones==='object'?remote.tombstones:{};
   const merged=mergeProfileState(getProfiles(),getProfileTombstones(),remoteProfiles,remoteTombstones);
   setProfiles(merged.profiles);setProfileTombstones(merged.tombstones);cleanupOldTombstones();
-  refreshProfileSelect($('profileSelect').value);
+  const hm=mergeHistoryState(getProfileHistory(),getDeletedHistory(),(remote&&remote.history)||{},(remote&&remote.historyDeleted)||{});
+  setProfileHistory(hm.history);setDeletedHistory(hm.deleted);
+  refreshProfileSelect($('profileSelect').value);renderHistory();
   const payload={
-   app:'F1 Strategy Engineer',
-   schemaVersion:2,
+   app:'F1 Strategy Manager',
+   schemaVersion:3,
    syncedAt:new Date().toISOString(),
    profiles:getProfiles(),
-   tombstones:getProfileTombstones()
+   tombstones:getProfileTombstones(),
+   history:getProfileHistory(),
+   historyDeleted:getDeletedHistory()
   };
   await dropboxUploadProfiles(token,payload);
   const cfg=getDropboxCfg();cfg.lastSync=new Date().toISOString();setDropboxCfg(cfg);
@@ -555,14 +623,14 @@ function saveCurrentProfile(){
  const p=getProfiles(),exists=!!p[name];
  if(exists&&!confirm('Das Profil „'+name+'“ existiert bereits. Wirklich aktualisieren?'))return;
  p[name]=profilePayload();clearProfileTombstone(name);setProfiles(p);refreshProfileSelect(name);
- setProfileStatus('Profil „'+name+'“ wurde '+(exists?'aktualisiert':'gespeichert')+'.','ok');autoSyncDropbox();
+ setProfileStatus('Profil „'+name+'“ wurde '+(exists?'aktualisiert':'gespeichert')+'.','ok');renderHistory();autoSyncDropbox();
 }
 function loadSelectedProfile(){
  const name=$('profileSelect').value;if(!name){setProfileStatus('Bitte ein Profil auswählen.','warn');return}
  const p=getProfiles()[name];if(!p){setProfileStatus('Profil nicht gefunden.','warn');refreshProfileSelect();return}
  $('profileName').value=name;applyProfile(p);
  const when=p.updatedAt?new Date(p.updatedAt).toLocaleString('de-DE'):'unbekannt';
- setProfileStatus('Profil „'+name+'“ geladen · zuletzt geändert '+when+'.','ok');
+ setProfileStatus('Profil „'+name+'“ geladen · zuletzt geändert '+when+'.','ok');renderHistory();
 }
 function deleteSelectedProfile(){
  const name=$('profileSelect').value;if(!name){setProfileStatus('Bitte ein Profil auswählen.','warn');return}
@@ -573,7 +641,7 @@ function deleteSelectedProfile(){
 }
 function exportProfiles(){
  const p=getProfiles();
- const payload={app:'F1 Strategy Engineer',schemaVersion:2,exportedAt:new Date().toISOString(),profiles:p,tombstones:getProfileTombstones()};
+ const payload={app:'F1 Strategy Manager',schemaVersion:3,exportedAt:new Date().toISOString(),profiles:p,tombstones:getProfileTombstones(),history:getProfileHistory(),historyDeleted:getDeletedHistory()};
  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
  const url=URL.createObjectURL(blob),a=document.createElement('a');
  a.href=url;a.download='f1-strategy-profiles-'+new Date().toISOString().slice(0,10)+'.json';
@@ -588,6 +656,9 @@ function importProfilesFromFile(file){
    const incoming=parsed&&parsed.profiles&&typeof parsed.profiles==='object'?parsed.profiles:null;
    if(!incoming)throw new Error();
    const incomingTombstones=parsed&&parsed.tombstones&&typeof parsed.tombstones==='object'?parsed.tombstones:{};
+   const hm=mergeHistoryState(getProfileHistory(),getDeletedHistory(),parsed.history||{},parsed.historyDeleted||{});
+   setProfileHistory(hm.history);setDeletedHistory(hm.deleted);
+
    const cur=getProfiles(),tombs=getProfileTombstones();let added=0,updated=0,skipped=0,deleted=0;
    Object.entries(incomingTombstones).forEach(([name,mark])=>{
     const dt=Date.parse((mark&&mark.deletedAt)||0)||0,pt=Date.parse((cur[name]&&cur[name].updatedAt)||0)||0,ldt=Date.parse((tombs[name]&&tombs[name].deletedAt)||0)||0;
@@ -1274,12 +1345,108 @@ $('labBase').addEventListener('change',labSetFromBase);
 $('labPit1Minus').addEventListener('click',()=>labStep('labPit1',-1));$('labPit1Plus').addEventListener('click',()=>labStep('labPit1',1));
 $('labPit2Minus').addEventListener('click',()=>labStep('labPit2',-1));$('labPit2Plus').addEventListener('click',()=>labStep('labPit2',1));
 
+
+const PROFILE_HISTORY_KEY='f1_strategy_profile_history_v1';
+const PROFILE_HISTORY_DELETED_KEY='f1_strategy_profile_history_deleted_v1';
+function getProfileHistory(){try{const d=JSON.parse(localStorage.getItem(PROFILE_HISTORY_KEY)||'{}');return d&&typeof d==='object'?d:{}}catch(e){return {}}}
+function setProfileHistory(d){try{localStorage.setItem(PROFILE_HISTORY_KEY,JSON.stringify(d||{}))}catch(e){}}
+function getDeletedHistory(){try{const d=JSON.parse(localStorage.getItem(PROFILE_HISTORY_DELETED_KEY)||'{}');return d&&typeof d==='object'?d:{}}catch(e){return {}}}
+function setDeletedHistory(d){try{localStorage.setItem(PROFILE_HISTORY_DELETED_KEY,JSON.stringify(d||{}))}catch(e){}}
+function historyProfileName(){return (($('profileSelect')&&$('profileSelect').value)||($('profileName')&&$('profileName').value)||'').trim()}
+function makeHistorySnapshot(){const values={};SAVE_IDS.forEach(id=>{const el=$(id);if(el)values[id]=el.value});return {id:'h_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),createdAt:new Date().toISOString(),values}}
+function mergeHistoryState(lh,ld,rh,rd){
+ const profiles=new Set([...Object.keys(lh||{}),...Object.keys(rh||{})]),history={},deleted=Object.assign({},ld||{},rd||{});
+ profiles.forEach(name=>{
+  const map={};[...(lh[name]||[]),...(rh[name]||[])].forEach(x=>{if(x&&x.id){const old=map[x.id];if(!old||Date.parse(x.createdAt||0)>=Date.parse(old.createdAt||0))map[x.id]=x}});
+  Object.keys(deleted).forEach(k=>{if(k.startsWith(name+'|')){const id=k.slice(name.length+1);delete map[id]}});
+  const arr=Object.values(map).sort((a,b)=>Date.parse(a.createdAt)-Date.parse(b.createdAt));if(arr.length)history[name]=arr;
+ });
+ return {history,deleted};
+}
+function historyStats(s,p){
+ const g=id=>(s.values&&s.values[id]!=null)?s.values[id]:'',r1=parseLapTime(g(p+'r1')),r5=parseLapTime(g(p+'r5')),r10=parseLapTime(g(p+'r10')),wear=Number(g(p+'w'));
+ if(r1==null||r5==null||r10==null)return {avg:null,stint:null,wear:isFinite(wear)?wear:null};
+ const t={r1,r5,r10};let stint=0;for(let l=1;l<=10;l++)stint+=lapTimeAtStintLap(t,l);
+ return {avg:(r1+r5+r10)/3,stint,wear:isFinite(wear)?wear:null};
+}
+function histD(v){if(v==null||!isFinite(v))return '–';return (v<0?'−':v>0?'+':'±')+formatRaceTime(Math.abs(v))}
+function histC(v){return v==null||!isFinite(v)||v===0?'histneutral':v<0?'histpositive':'histnegative'}
+function renderHistory(){
+ if(!$('historyList'))return;const name=historyProfileName(),all=getProfileHistory(),list=(name&&all[name]?all[name]:[]).slice().sort((a,b)=>Date.parse(b.createdAt)-Date.parse(a.createdAt));
+ $('historyList').innerHTML='';$('historyA').innerHTML='';$('historyB').innerHTML='';
+ if(!name){$('historyStatus').textContent='Bitte zuerst ein Streckenprofil wählen.';$('historyCompare').innerHTML='';return}
+ if(!list.length){$('historyStatus').textContent='Noch keine Messstände für „'+name+'“ gespeichert.';$('historyCompare').innerHTML='';return}
+ $('historyStatus').textContent=list.length+' Messstand'+(list.length===1?'':'e')+' gespeichert.';
+ list.forEach(s=>{const d=new Date(s.createdAt),label=d.toLocaleDateString('de-DE')+' · '+d.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'});for(const id of ['historyA','historyB']){const o=document.createElement('option');o.value=s.id;o.textContent=label;$(id).appendChild(o)}const div=document.createElement('div');div.className='histitem';div.innerHTML='<div class="histtitle">'+label+'</div><div class="histmeta">Soft '+(s.values.sw||'–')+' % · Medium '+(s.values.mw||'–')+' % · Hard '+(s.values.hw||'–')+' % Verschleiß nach 10 Runden</div>';$('historyList').appendChild(div)});
+ if(list.length>1){$('historyA').selectedIndex=1;$('historyB').selectedIndex=0}renderHistoryCompare();
+}
+function renderHistoryCompare(){
+ const name=historyProfileName(),list=(getProfileHistory()[name]||[]),a=list.find(x=>x.id===$('historyA').value),b=list.find(x=>x.id===$('historyB').value);if(!a||!b){$('historyCompare').innerHTML='';return}
+ let html='';[['Soft','s'],['Medium','m'],['Hard','h']].forEach(([n,p])=>{const A=historyStats(a,p),B=historyStats(b,p),pace=A.avg!=null&&B.avg!=null?B.avg-A.avg:null,st=A.stint!=null&&B.stint!=null?B.stint-A.stint:null,w=A.wear!=null&&B.wear!=null?B.wear-A.wear:null;html+='<div class="histmetric"><b>'+n+'</b><div class="'+histC(pace)+'">Ø Pace '+histD(pace)+'</div><div class="'+histC(st)+'">10 Runden '+histD(st)+'</div><div class="'+histC(w)+'">Verschleiß '+(w==null?'–':(w>0?'+':'')+w.toFixed(1)+' %')+'</div></div>'});$('historyCompare').innerHTML=html;
+}
+function addHistorySnapshot(){
+ const name=historyProfileName();if(!name){$('historyStatus').textContent='Bitte zuerst ein Streckenprofil wählen.';return}
+ const all=getProfileHistory(),s=makeHistorySnapshot();if(!all[name])all[name]=[];all[name].push(s);setProfileHistory(all);renderHistory();autoSyncDropbox();
+}
+function deleteHistorySnapshot(){
+ const name=historyProfileName(),id=$('historyB').value||$('historyA').value;if(!name||!id)return;if(!confirm('Ausgewählten Messstand wirklich löschen?'))return;
+ const all=getProfileHistory();all[name]=(all[name]||[]).filter(x=>x.id!==id);if(!all[name].length)delete all[name];setProfileHistory(all);
+ const del=getDeletedHistory();del[name+'|'+id]={deletedAt:new Date().toISOString()};setDeletedHistory(del);renderHistory();autoSyncDropbox();
+}
+
+
+if($('historyAddBtn'))$('historyAddBtn').addEventListener('click',addHistorySnapshot);
+if($('historyDeleteBtn'))$('historyDeleteBtn').addEventListener('click',deleteHistorySnapshot);
+if($('historyA'))$('historyA').addEventListener('change',renderHistoryCompare);
+if($('historyB'))$('historyB').addEventListener('change',renderHistoryCompare);
+if($('profileSelect'))$('profileSelect').addEventListener('change',()=>setTimeout(renderHistory,0));
+if($('profileName'))$('profileName').addEventListener('input',()=>setTimeout(renderHistory,0));
+setTimeout(renderHistory,0);
+
+
+function raceCardStrategy(){return (typeof LAB_STRATEGIES!=='undefined'&&LAB_STRATEGIES.length)?LAB_STRATEGIES[0]:null}
+function raceCardNames(){return ['🔴 Soft','🟡 Medium','⚪ Hard']}
+function raceCardRender(){
+ const x=raceCardStrategy(),R=Math.max(1,Math.round(N('race'))),names=raceCardNames();
+ const profile=(($('profileSelect')&&$('profileSelect').value)||($('profileName')&&$('profileName').value)||'').trim();
+ $('raceCardTrack').textContent=profile||('Renndistanz · '+R+' Runden');
+ if(!x){$('raceCardPlan').innerHTML='<div class="raceplan">Keine Strategie verfügbar.</div>';$('raceAlternative').innerHTML='';return}
+ let start=1,plan='<div class="raceplan">';
+ x.seq.forEach((c,i)=>{
+   const end=i<x.pits.length?x.pits[i]:R,len=end-start+1,t=tyre(['s','m','h'][c]),wear=wearAt(t,len);
+   plan+='<div class="racecompound">'+names[c]+' <span class="small">R'+start+'–'+end+'</span></div>';
+   plan+='<div class="racestats"><div class="racestat"><span class="small">STINT</span><b>'+len+' Runden</b></div><div class="racestat"><span class="small">VERSCHLEISS ENDE</span><b>'+wear.toFixed(1)+' %</b></div></div>';
+   if(i<x.pits.length)plan+='<div class="racearrow">↓</div><div class="racepit">BOX · RUNDE '+x.pits[i]+'</div><div class="racearrow">↓</div>';
+   start=end+1;
+ });
+ plan+='</div>';$('raceCardPlan').innerHTML=plan;
+ const alt=(typeof LAB_STRATEGIES!=='undefined'&&LAB_STRATEGIES[1])?LAB_STRATEGIES[1]:null;
+ if(alt){const seq=alt.seq.map(c=>names[c]).join(' → '),pits=alt.pits.map(p=>'R'+p).join(' / ');$('raceAlternative').innerHTML='<b>PLAN B</b><div class="small" style="margin-top:4px">'+seq+' · Box '+pits+'</div>'}
+ else $('raceAlternative').innerHTML='<b>PLAN B</b><div class="small" style="margin-top:4px">Keine Alternative verfügbar.</div>';
+}
+function openRaceCard(){raceCardRender();$('raceOverlay').classList.add('open');document.body.classList.add('racecard-active')}
+function closeRaceCard(){$('raceOverlay').classList.remove('open');document.body.classList.remove('racecard-active')}
+
+
+
 loadInputs();
 updateAllTyreTimes();
 calc();
 onresize=()=>{hideChartTip();calc();};
 
 </script>
+
+<div class="raceoverlay" id="raceOverlay">
+ <div class="raceinner">
+  <div class="racehead">
+   <div><h2>F1 Strategy Manager · Race Card</h2><div class="racetrack" id="raceCardTrack">Aktuelle Strategie</div></div>
+   <button type="button" class="raceclose" id="raceCardClose" onclick="closeRaceCard()">SCHLIESSEN</button>
+  </div>
+  <div id="raceCardPlan"></div>
+  <div class="racealt" id="raceAlternative"></div>
+ </div>
+</div>
+
 </body></html>
 <style>
 .pacechart .paceMini{height:142px!important;min-height:142px!important}
