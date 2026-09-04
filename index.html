@@ -68,9 +68,12 @@ button:hover{border-color:#6c84a4;background:#1a2a40}
  linear-gradient(rgba(67,86,111,.10) 1px,transparent 1px),
  linear-gradient(90deg,rgba(67,86,111,.10) 1px,transparent 1px),
  #07111d;
- background-size:44px 44px;border:1px solid #203248;border-radius:10px;display:block;touch-action:manipulation
+ background-size:44px 44px;border:1px solid #203248;border-radius:10px;display:block;touch-action:manipulation;cursor:pointer
 }
-.charttip{position:absolute;display:none;pointer-events:none;min-width:145px;padding:9px 11px;border-radius:8px;background:#08121e;border:1px solid #526984;color:#f8fafc;font-size:12px;line-height:1.45;box-shadow:0 10px 28px rgba(0,0,0,.35);z-index:4}
+
+.charttapdot{position:absolute;width:14px;height:14px;border-radius:50%;background:#fff;border:3px solid #ef4444;box-shadow:0 0 0 2px rgba(0,0,0,.45);pointer-events:none;z-index:19;transform:translate(-50%,-50%);display:none}
+
+.charttip{position:absolute;display:none;pointer-events:none;min-width:145px;padding:9px 11px;border-radius:8px;background:#08121e;border:1px solid #526984;color:#f8fafc;font-size:12px;line-height:1.45;box-shadow:0 10px 28px rgba(0,0,0,.35);z-index:20}
 .strats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 .strat{
  position:relative;background:linear-gradient(180deg,#0b1725,#08121d);border:1px solid #2b3d53;border-radius:11px;padding:13px;overflow:hidden
@@ -141,34 +144,6 @@ table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}td,th{p
 .histmetric b{display:block;margin-bottom:3px}
 .histpositive{color:var(--green);font-weight:800}.histnegative{color:#ff7b85;font-weight:800}.histneutral{color:var(--muted);font-weight:800}
 @media(max-width:700px){.histactions,.histselects,.histcmp{grid-template-columns:1fr}}
-
-/* Race Card */
-.racecardbar{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.racecardopen{width:auto;margin:0;padding:10px 14px}
-.raceoverlay{position:fixed;inset:0;z-index:9999;background:linear-gradient(180deg,#07111e,#03070d);padding:14px;overflow:auto;display:none}
-.raceoverlay.open{display:block}
-.raceinner{max-width:760px;margin:0 auto}
-.racehead{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:12px;border-bottom:1px solid #26384d}
-.racehead h2{margin:0;font-size:22px;font-style:italic}
-.raceclose{width:auto;margin:0;padding:9px 12px}
-.racetrack{font-size:13px;color:var(--muted);margin-top:3px}
-.raceplan{margin-top:14px;border:1px solid #2b3d53;border-radius:14px;padding:14px;background:linear-gradient(180deg,#0b1725,#07111c)}
-.racecompound{font-size:25px;font-weight:950;letter-spacing:.3px}
-.racearrow{text-align:center;color:var(--muted);font-size:22px;margin:5px 0}
-.racepit{border:1px solid rgba(57,217,138,.55);background:rgba(22,101,52,.12);border-radius:10px;padding:12px;text-align:center;font-size:20px;font-weight:950}
-.racestats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:12px}
-.racestat{border:1px solid #26384d;border-radius:10px;padding:10px;background:#08131f}
-.racestat .small{display:block}.racestat b{font-size:16px}
-.racelapbox{margin-top:14px;text-align:center;border:1px solid #26384d;border-radius:14px;padding:14px;background:#08131f}
-.racelapcontrols{display:grid;grid-template-columns:64px 1fr 64px;gap:9px;align-items:center;margin-top:8px}
-.racelapcontrols button{margin:0;font-size:22px;padding:12px 0}
-.racelapnum{font-size:34px;font-weight:950}
-.racemessage{margin-top:12px;padding:14px;border-radius:11px;border:1px solid #31445d;text-align:center;font-weight:950;font-size:20px}
-.racemessage.now{border-color:rgba(57,217,138,.75);color:#79e8ad;background:rgba(22,101,52,.14)}
-.racealt{margin-top:12px;border:1px solid #26384d;border-radius:10px;padding:10px;background:#08131f}
-body.racecard-active{overflow:hidden}
-@media(max-width:560px){.raceoverlay{padding:9px}.racecompound{font-size:22px}.racestats{grid-template-columns:1fr 1fr}.racehead h2{font-size:19px}}
-
 
 /* Version 5.6 - Strategy Command Center */
 .commandcenter{
@@ -385,7 +360,7 @@ body.racecard-active{overflow:hidden}
 
 <div class="card">
 <h2>Reifenlebensdauer</h2>
-<div class="chartwrap"><canvas id="chart"></canvas><div id="chartTip" class="charttip" role="status" aria-live="polite"></div></div>
+<div class="chartwrap"><canvas id="chart"></canvas><div id="chartTapDot" class="charttapdot"></div><div id="chartTip" class="charttip" role="status" aria-live="polite"></div></div>
 <p class="small">Die horizontale Achse zeigt ausschließlich die Reifenrunden. Die Verschleißkurven werden aus deiner 10-Runden-Messung berechnet.</p>
 </div>
 
@@ -417,12 +392,7 @@ body.racecard-active{overflow:hidden}
 </div>
 
 
-<div class="card">
-  <div class="racecardbar">
-    <div><h2 style="margin:0;border:0;padding:0">Race Card</h2><div class="small">Kompakte Rennansicht der aktuell berechneten Strategie.</div></div>
-    <button type="button" class="racecardopen" id="raceCardOpen" onclick="openRaceCard()">RACE CARD ÖFFNEN</button>
-  </div>
-</div>
+
 
 <div class="card" id="strategyLabCard">
 <div class="section-toggle" id="labToggle" onclick="toggleCollapsible('labToggle','labBody')"><h2 style="margin:0;flex:1">Strategie-Labor</h2><span class="chev">⌄</span></div><div class="collapsible-body" id="labBody">
@@ -442,12 +412,15 @@ body.racecard-active{overflow:hidden}
 </div>
 </div>
 
+
+
+
+</div>
+
 <div class="card" style="padding:10px 14px;text-align:center">
-  <div class="small" style="font-weight:800;letter-spacing:.45px">F1 STRATEGY MANAGER · VERSION 5.9 (BETA)</div>
+  <div class="small" style="font-weight:800;letter-spacing:.45px">F1 STRATEGY MANAGER · VERSION 1.67 (BETA)</div>
 </div>
 
-
-</div>
 </div>
 
 <script>
@@ -1378,22 +1351,28 @@ const drawPaceCharts=()=>{
 
 const tyreCanvas=$('chart');
 const chartTip=$('chartTip');
+const chartTapDot=$('chartTapDot');
 
 function hideChartTip(){
   chartTip.style.display='none';
+  if(chartTapDot) chartTapDot.style.display='none';
 }
 
 function showChartTipFromEvent(e){
   const s=window.chartState;
-  if(!s)return;
+  if(!s || !tyreCanvas || !chartTip)return;
 
   const rect=tyreCanvas.getBoundingClientRect();
   if(!rect.width || !rect.height)return;
 
-  // Canvas is drawn in CSS/logical pixels because ctx.scale(devicePixelRatio).
-  // Therefore pointer coordinates must stay in CSS pixels too.
-  const x=e.clientX-rect.left;
-  const y=e.clientY-rect.top;
+  const clientX=Number(e.clientX);
+  const clientY=Number(e.clientY);
+  if(!Number.isFinite(clientX) || !Number.isFinite(clientY))return;
+
+  const scaleX=s.w/rect.width;
+  const scaleY=s.h/rect.height;
+  const x=(clientX-rect.left)*scaleX;
+  const y=(clientY-rect.top)*scaleY;
 
   if(x<s.p.l || x>s.w-s.p.r || y<s.p.t || y>s.h-s.p.b){
     hideChartTip();
@@ -1408,37 +1387,43 @@ function showChartTipFromEvent(e){
     const wear=Math.min(100,wearAt(t,lap));
     const yy=s.p.t+s.ph*(1-wear/100);
     const dist=Math.abs(y-yy);
-    if(!best || dist<best.dist){
-      best={t,i,wear,dist,yy};
-    }
+    if(!best || dist<best.dist) best={t,i,wear,dist,yy};
   });
 
-  // Generous hit area for touch use.
-  const tolerance=28;
-  if(!best || best.dist>tolerance){
-    hideChartTip();
-    return;
-  }
+  if(!best)return;
 
-  window.chartSelection={i:best.i,lap:lap};
-  calc();
+  // Always use the closest tyre curve within the graph area.
+  // This makes taps on phones much more forgiving.
+  window.chartSelection={i:best.i,lap};
 
+  const labels=['🔴 Soft','🟡 Medium','⚪ Hard'];
   chartTip.innerHTML=
-    '<b>'+best.t.name+'</b><br>'+
+    '<b>'+labels[best.i]+'</b><br>'+
     'Runde: '+lap+'<br>'+
     'Abnutzung: '+best.wear.toFixed(1)+' %';
 
   chartTip.style.display='block';
 
-  // Position popup within chart wrapper.
   const wrap=tyreCanvas.parentElement;
+  if(chartTapDot){
+    const dotLogicalX=s.p.l+s.pw*lap/s.xMax;
+    const dotLogicalY=s.p.t+s.ph*(1-best.wear/100);
+    const dotX=dotLogicalX*(rect.width/s.w);
+    const dotY=dotLogicalY*(rect.height/s.h);
+    const dotColors=['#ef4444','#facc15','#e5e7eb'];
+    chartTapDot.style.left=dotX+'px';
+    chartTapDot.style.top=dotY+'px';
+    chartTapDot.style.borderColor=dotColors[best.i];
+    chartTapDot.style.display='block';
+  }
+
   const wrapRect=wrap.getBoundingClientRect();
-  const localX=e.clientX-wrapRect.left;
-  const localY=e.clientY-wrapRect.top;
+  const localX=clientX-wrapRect.left;
+  const localY=clientY-wrapRect.top;
 
   requestAnimationFrame(()=>{
-    const tipW=chartTip.offsetWidth || 150;
-    const tipH=chartTip.offsetHeight || 70;
+    const tipW=chartTip.offsetWidth || 155;
+    const tipH=chartTip.offsetHeight || 72;
     let left=localX+12;
     let top=localY-tipH-10;
 
@@ -1454,9 +1439,14 @@ function showChartTipFromEvent(e){
 
 tyreCanvas.addEventListener('click',showChartTipFromEvent);
 tyreCanvas.addEventListener('pointerup',e=>{
-  if(e.pointerType!=='mouse') showChartTipFromEvent(e);
+  if(e.pointerType==='touch' || e.pointerType==='pen'){
+    e.preventDefault();
+    showChartTipFromEvent(e);
+  }
 });
-
+tyreCanvas.addEventListener('pointerleave',e=>{
+  if(e.pointerType==='mouse') hideChartTip();
+});
 
 let LAB_STRATEGIES=[];
 function labSetFromBase(){
@@ -1554,32 +1544,6 @@ if($('profileName'))$('profileName').addEventListener('input',()=>setTimeout(ren
 setTimeout(renderHistory,0);
 
 
-function raceCardStrategy(){return (typeof LAB_STRATEGIES!=='undefined'&&LAB_STRATEGIES.length)?LAB_STRATEGIES[0]:null}
-function raceCardNames(){return ['🔴 Soft','🟡 Medium','⚪ Hard']}
-function raceCardRender(){
- const x=raceCardStrategy(),R=Math.max(1,Math.round(N('race'))),names=raceCardNames();
- const profile=(($('profileSelect')&&$('profileSelect').value)||($('profileName')&&$('profileName').value)||'').trim();
- $('raceCardTrack').textContent=profile||('Renndistanz · '+R+' Runden');
- if(!x){$('raceCardPlan').innerHTML='<div class="raceplan">Keine Strategie verfügbar.</div>';$('raceAlternative').innerHTML='';return}
- let start=1,plan='<div class="raceplan">';
- x.seq.forEach((c,i)=>{
-   const end=i<x.pits.length?x.pits[i]:R,len=end-start+1,t=tyre(['s','m','h'][c]),wear=wearAt(t,len);
-   plan+='<div class="racecompound">'+names[c]+' <span class="small">R'+start+'–'+end+'</span></div>';
-   plan+='<div class="racestats"><div class="racestat"><span class="small">STINT</span><b>'+len+' Runden</b></div><div class="racestat"><span class="small">VERSCHLEISS ENDE</span><b>'+wear.toFixed(1)+' %</b></div></div>';
-   if(i<x.pits.length)plan+='<div class="racearrow">↓</div><div class="racepit">BOX · RUNDE '+x.pits[i]+'</div><div class="racearrow">↓</div>';
-   start=end+1;
- });
- plan+='</div>';$('raceCardPlan').innerHTML=plan;
- const alt=(typeof LAB_STRATEGIES!=='undefined'&&LAB_STRATEGIES[1])?LAB_STRATEGIES[1]:null;
- if(alt){const seq=alt.seq.map(c=>names[c]).join(' → '),pits=alt.pits.map(p=>'R'+p).join(' / ');$('raceAlternative').innerHTML='<b>PLAN B</b><div class="small" style="margin-top:4px">'+seq+' · Box '+pits+'</div>'}
- else $('raceAlternative').innerHTML='<b>PLAN B</b><div class="small" style="margin-top:4px">Keine Alternative verfügbar.</div>';
-}
-function openRaceCard(){raceCardRender();$('raceOverlay').classList.add('open');document.body.classList.add('racecard-active')}
-function closeRaceCard(){$('raceOverlay').classList.remove('open');document.body.classList.remove('racecard-active')}
-
-
-
-
 function renderCommandCenter(){
  const x=(typeof LAB_STRATEGIES!=='undefined'&&LAB_STRATEGIES.length)?LAB_STRATEGIES[0]:null;
  const names=['🔴 Soft','🟡 Medium','⚪ Hard'],keys=['s','m','h'];
@@ -1615,16 +1579,7 @@ onresize=()=>{hideChartTip();calc();};
 
 </script>
 
-<div class="raceoverlay" id="raceOverlay">
- <div class="raceinner">
-  <div class="racehead">
-   <div><h2>F1 Strategy Manager · Race Card</h2><div class="racetrack" id="raceCardTrack">Aktuelle Strategie</div></div>
-   <button type="button" class="raceclose" id="raceCardClose" onclick="closeRaceCard()">SCHLIESSEN</button>
-  </div>
-  <div id="raceCardPlan"></div>
-  <div class="racealt" id="raceAlternative"></div>
- </div>
-</div>
+
 
 </body></html>
 <style>
