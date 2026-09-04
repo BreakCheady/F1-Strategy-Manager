@@ -169,9 +169,88 @@ table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}td,th{p
 body.racecard-active{overflow:hidden}
 @media(max-width:560px){.raceoverlay{padding:9px}.racecompound{font-size:22px}.racestats{grid-template-columns:1fr 1fr}.racehead h2{font-size:19px}}
 
+
+/* Version 5.6 - Strategy Command Center */
+.commandcenter{
+ display:grid;grid-template-columns:minmax(0,1.45fr) minmax(280px,.55fr);gap:12px;
+ margin:12px 0;
+}
+.commandmain,.commandstats{
+ background:linear-gradient(180deg,#0b1725,#07111d);
+ border:1px solid #2a3d54;border-radius:13px;padding:14px;
+}
+.commandmain{border-top:2px solid rgba(57,217,138,.8)}
+.commandeyebrow{
+ font-size:11px;font-weight:900;letter-spacing:.7px;text-transform:uppercase;color:#79e8ad;margin-bottom:8px
+}
+.commandtitle{font-size:24px;font-weight:950;font-style:italic;margin-bottom:10px}
+.commandtimeline{display:flex;align-items:stretch;gap:8px;min-height:76px}
+.commandseg{
+ flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;
+ border:1px solid #31445d;border-radius:10px;background:#08131f;padding:10px;text-align:center
+}
+.commandseg strong{font-size:18px}.commandseg span{font-size:11px;color:var(--muted);margin-top:4px}
+.commandpit{
+ align-self:center;white-space:nowrap;border:1px solid rgba(57,217,138,.5);
+ color:#79e8ad;background:rgba(22,101,52,.12);border-radius:999px;padding:8px 10px;
+ font-size:12px;font-weight:900
+}
+.commandstats{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.commandmetric{
+ border:1px solid #26384d;border-radius:10px;padding:10px;background:#08131f;min-height:64px
+}
+.commandmetric .small{display:block;text-transform:uppercase;letter-spacing:.4px}
+.commandmetric b{display:block;font-size:18px;margin-top:5px}
+@media(max-width:900px){.commandcenter{grid-template-columns:1fr}}
+@media(max-width:560px){
+ .commandtimeline{flex-direction:column}
+ .commandpit{align-self:stretch;text-align:center}
+ .commandstats{grid-template-columns:1fr 1fr}
+ .commandtitle{font-size:20px}
+}
+
+
+/* Version 5.7 - UI cleanup package */
+.section-toggle{
+ display:flex;align-items:center;justify-content:space-between;gap:10px;
+ cursor:pointer;user-select:none
+}
+.section-toggle .chev{font-size:18px;color:var(--muted);transition:transform .2s ease}
+.collapsed .chev{transform:rotate(-90deg)}
+.collapsible-body{display:block}
+.collapsed + .collapsible-body{display:none}
+.strategy-status{
+ display:flex;flex-wrap:wrap;gap:7px;margin-top:10px
+}
+.statuschip{
+ border:1px solid #31445d;background:#08131f;border-radius:999px;
+ padding:6px 9px;font-size:11px;font-weight:850;color:#cbd5e1
+}
+.statuschip.ok{border-color:rgba(57,217,138,.45);color:#79e8ad;background:rgba(22,101,52,.10)}
+.commandpit{font-size:13px;padding:9px 12px}
+.commandpit strong{font-size:16px}
+.strategy-detail-toggle{
+ width:auto;margin:0 0 10px 0;padding:9px 12px
+}
+.strategy-details-hidden{display:none!important}
+.track-subtitle{
+ margin-top:3px;font-size:12px;color:#9fb0c6;text-transform:uppercase;letter-spacing:.55px
+}
+.tyrelabel{display:inline-flex;align-items:center;gap:5px}
+.chartclean #chart{
+ background:
+ linear-gradient(rgba(67,86,111,.06) 1px,transparent 1px),
+ linear-gradient(90deg,rgba(67,86,111,.06) 1px,transparent 1px),
+ #07111d;
+ border-color:#1d2d40
+}
+@media(max-width:560px){
+ .statuschip{font-size:10px;padding:5px 8px}
+}
+
 </style>
 </head>
-<body><div class="wrap">
+<body class="chartclean"><div class="wrap">
 <div class="apphead">
   <div class="brand"><div class="f1mark">F1</div><h1>Strategy Manager</h1></div>
   <div class="tagline">Rennstrategie-Analyse · Schnell. Klar. Fundiert.</div>
@@ -313,7 +392,26 @@ body.racecard-active{overflow:hidden}
 
 
 <div class="card">
+
 <h2>Strategie A / B / C</h2>
+<div class="commandcenter" id="commandCenter">
+  <div class="commandmain">
+    <div class="commandeyebrow">Empfohlene Strategie</div>
+    <div class="commandtitle" id="commandTitle">Strategie wird berechnet …</div>
+    <div class="commandtimeline" id="commandTimeline"></div>
+  </div>
+  <div class="commandstats">
+    <div class="commandmetric"><span class="small">Gesamtzeit</span><b id="commandTime">–</b></div>
+    <div class="commandmetric"><span class="small">Max. Verschleiß</span><b id="commandWear">–</b></div>
+    <div class="commandmetric"><span class="small">Stopps</span><b id="commandStops">–</b></div>
+    <div class="commandmetric"><span class="small">Pace Loss</span><b id="commandPace">–</b></div>
+  </div>
+</div>
+
+<button type="button" class="strategy-detail-toggle" id="strategyDetailsToggle" onclick="toggleStrategyDetails()">DETAILANALYSE AUSBLENDEN</button>
+<div class="strategy-status" id="strategyStatus"></div>
+
+
 <div id="strategyCards" class="strats"></div>
 <p class="small">A = schnellste sinnvolle Strategie, B = nächstschnelle Alternative, C = reifenschonendere Alternative. Die Strategie berücksichtigt Reifenverschleiß, progressiven Pace-Abbau, Boxenstopp-Verlust und die verfügbaren Reifensätze.</p>
 </div>
@@ -327,7 +425,7 @@ body.racecard-active{overflow:hidden}
 </div>
 
 <div class="card" id="strategyLabCard">
-<h2>Strategie-Labor</h2>
+<div class="section-toggle" id="labToggle" onclick="toggleCollapsible('labToggle','labBody')"><h2 style="margin:0;flex:1">Strategie-Labor</h2><span class="chev">⌄</span></div><div class="collapsible-body" id="labBody">
 <div class="small" style="margin-bottom:10px">Eine berechnete Strategie wählen und Stopprunden oder Reifenfolge verändern. Die automatische Strategie-Engine bleibt unverändert.</div>
 <div class="labgrid">
 <div>
@@ -345,13 +443,58 @@ body.racecard-active{overflow:hidden}
 </div>
 
 <div class="card" style="padding:10px 14px;text-align:center">
-  <div class="small" style="font-weight:800;letter-spacing:.45px">F1 STRATEGY MANAGER · VERSION 5.5 (BETA)</div>
+  <div class="small" style="font-weight:800;letter-spacing:.45px">F1 STRATEGY MANAGER · VERSION 5.8 (BETA)</div>
 </div>
 
 
+</div>
 </div>
 
 <script>
+
+function toggleCollapsible(toggleId,bodyId){
+ const t=$(toggleId),b=$(bodyId); if(!t||!b)return;
+ const isHidden=b.style.display==='none';
+ b.style.display=isHidden?'block':'none';
+ t.classList.toggle('collapsed',!isHidden);
+}
+function toggleStrategyDetails(){
+ const grid=document.querySelector('.strats');
+ const btn=$('strategyDetailsToggle');
+ if(!grid||!btn)return;
+ const hidden=grid.classList.toggle('strategy-details-hidden');
+ btn.textContent=hidden?'DETAILANALYSE ANZEIGEN':'DETAILANALYSE AUSBLENDEN';
+}
+function compoundLabel(name){
+ return name==='Soft'?'🔴 Soft':name==='Medium'?'🟡 Medium':name==='Hard'?'⚪ Hard':name;
+}
+function updateTrackSubtitle(){
+ const p=(($('profileSelect')&&$('profileSelect').value)||($('profileName')&&$('profileName').value)||'').trim();
+ const el=$('trackSubtitle'); if(!el)return;
+ el.textContent=(p?p+' · ':'')+'Race Strategy';
+}
+function renderStrategyStatus(){
+ const el=$('strategyStatus'); if(!el)return;
+ const x=(typeof LAB_STRATEGIES!=='undefined'&&LAB_STRATEGIES.length)?LAB_STRATEGIES[0]:null;
+ if(!x){el.innerHTML='';return}
+ const R=Math.max(1,Math.round(N('race'))),keys=['s','m','h'];
+ let start=1,maxWear=0;
+ x.seq.forEach((c,i)=>{
+   const end=i<x.pits.length?x.pits[i]:R,len=end-start+1;
+   maxWear=Math.max(maxWear,wearAt(tyre(keys[c]),len));
+   start=end+1;
+ });
+ const compounds=new Set(x.seq).size;
+ const enough=(typeof enoughSets==='function')?enoughSets(x.seq):true;
+ el.innerHTML=
+  '<span class="statuschip ok">✓ '+x.stops+'-STOPP</span>'+
+  '<span class="statuschip '+(enough?'ok':'')+'">'+(enough?'✓':'!')+' REIFENSÄTZE</span>'+
+  '<span class="statuschip '+(maxWear<=100?'ok':'')+'">MAX '+maxWear.toFixed(1)+' %</span>'+
+  '<span class="statuschip '+(compounds>=2?'ok':'')+'">'+compounds+' COMPOUNDS</span>';
+}
+
+function tyreDisplayName(name){return name==='Soft'?'🔴 Soft':name==='Medium'?'🟡 Medium':name==='Hard'?'⚪ Hard':name}
+
 const $=id=>document.getElementById(id),N=id=>parseFloat($(id).value)||0;
 
 const SAVE_KEY='f1_strategy_engineer';
@@ -938,9 +1081,9 @@ function tacticalHint(x,T,R,P){
    if(currentLapTime==null||freshNext==null)return;
    const gainPerLap=currentLapTime-freshNext;
    if(gainPerLap>800){
-     hints.push('Undercut-Potenzial vor Stopp '+(j+1)+': frischer '+nextTyre.name+' ist deutlich schneller.');
+     hints.push('Undercut-Potenzial vor Stopp '+(j+1)+': frischer '+compoundLabel(nextTyre.name)+' ist deutlich schneller.');
    }else if(gainPerLap<250){
-     hints.push('Overcut möglich vor Stopp '+(j+1)+': aktueller '+tyre.name+' verliert noch wenig Pace.');
+     hints.push('Overcut möglich vor Stopp '+(j+1)+': aktueller '+compoundLabel(tyre.name)+' verliert noch wenig Pace.');
    }else{
      hints.push('Stopp '+(j+1)+' liegt nahe am neutralen Wechselpunkt.');
    }
@@ -1197,7 +1340,7 @@ const drawPaceCharts=()=>{
        const endLap=j<x.pits.length?x.pits[j]:R;
        const stintLaps=(j===0?x.pits[0]:(j<x.pits.length?x.pits[j]-x.pits[j-1]:R-x.pits[x.pits.length-1]));
        const tyre=T[x.seq[j]];
-       const cls=tyre.name.toLowerCase();
+       const cls=compoundLabel(tyre.name).toLowerCase();
        const label=(tyre.name==='Soft'?'S':tyre.name==='Medium'?'M':'H')+' '+startLap+'–'+endLap;
        body+='<div class="seg '+cls+'" style="width:'+(stintLaps/R*100)+'%">'+label+'</div>';
      }
@@ -1208,7 +1351,7 @@ const drawPaceCharts=()=>{
        const endLap=j<x.pits.length?x.pits[j]:R;
        const stintLaps=(j===0?x.pits[0]:(j<x.pits.length?x.pits[j]-x.pits[j-1]:R-x.pits[x.pits.length-1]));
        const tyre=T[x.seq[j]];
-       body+='<div class="stint"><b>'+tyre.name+'</b> · R'+startLap+'–'+endLap+'<br><span class="muted">'+stintLaps+' Runden · '+wearAt(tyre,stintLaps).toFixed(1)+' % Verschleiß</span></div>';
+       body+='<div class="stint"><b>'+compoundLabel(tyre.name)+'</b> · R'+startLap+'–'+endLap+'<br><span class="muted">'+stintLaps+' Runden · '+wearAt(tyre,stintLaps).toFixed(1)+' % Verschleiß</span></div>';
 
        if(j<x.pits.length){
          const ana=preciseStopAnalysis(x,j,T,R,P);
@@ -1216,7 +1359,7 @@ const drawPaceCharts=()=>{
          const cross=crossoverLap(tyre,nextTyre,Math.max(20,stintLaps+10));
          const loss=paceLossAtStintEnd(tyre,stintLaps);
          body+='<div class="stopmeta">Pace-Verlust am Stintende: <b>+'+(loss/1000).toFixed(3).replace('.',',')+' s/Runde</b>';
-         if(cross!=null)body+='<br>Crossover zu frischem '+nextTyre.name+': <b>ab Stint-Runde '+cross+'</b>';
+         if(cross!=null)body+='<br>Crossover zu frischem '+compoundLabel(nextTyre.name)+': <b>ab Stint-Runde '+cross+'</b>';
          body+='</div>';
        }
      }
@@ -1228,6 +1371,8 @@ const drawPaceCharts=()=>{
      div.innerHTML=body; cards.appendChild(div);
    });
  }
+
+ renderCommandCenter();
 }
 
 
@@ -1434,9 +1579,38 @@ function closeRaceCard(){$('raceOverlay').classList.remove('open');document.body
 
 
 
+
+function renderCommandCenter(){
+ const x=(typeof LAB_STRATEGIES!=='undefined'&&LAB_STRATEGIES.length)?LAB_STRATEGIES[0]:null;
+ const names=['🔴 Soft','🟡 Medium','⚪ Hard'],keys=['s','m','h'];
+ if(!x){
+   $('commandTitle').textContent='Keine Strategie verfügbar';
+   $('commandTimeline').innerHTML='';
+   $('commandTime').textContent='–';$('commandWear').textContent='–';$('commandStops').textContent='–';$('commandPace').textContent='–';
+   return;
+ }
+ $('commandTitle').textContent=x.seq.map(c=>names[c]).join(' → ');
+ let start=1,R=Math.max(1,Math.round(N('race'))),html='',maxWear=0,maxLoss=0;
+ x.seq.forEach((c,i)=>{
+   const end=i<x.pits.length?x.pits[i]:R;
+   const len=end-start+1,t=tyre(keys[c]),wear=wearAt(t,len),loss=paceLossAtStintEnd(t,len);
+   maxWear=Math.max(maxWear,wear); maxLoss=Math.max(maxLoss,loss||0);
+   html+='<div class="commandseg"><strong>'+names[c]+'</strong><span>R'+start+'–'+end+' · '+len+' Runden</span></div>';
+   if(i<x.pits.length)html+='<div class="commandpit"><strong>BOX R'+x.pits[i]+'</strong></div>';
+   start=end+1;
+ });
+ $('commandTimeline').innerHTML=html;
+ $('commandTime').textContent=formatRaceTime(x.total);
+ $('commandWear').textContent=maxWear.toFixed(1)+' %';
+ $('commandStops').textContent=x.stops;
+ $('commandPace').textContent='+'+(maxLoss/1000).toFixed(2).replace('.',',')+' s';
+
+ renderStrategyStatus(); updateTrackSubtitle();}
+
 loadInputs();
 updateAllTyreTimes();
 calc();
+updateTrackSubtitle();
 onresize=()=>{hideChartTip();calc();};
 
 </script>
