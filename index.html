@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#090e1b">
-<title>F1 Strategy Engineer V48</title>
+<title>F1 Strategy Engineer V50</title>
 <style>
 :root{
  --bg:#07101c;--panel:#0b1522;--panel2:#0e1a2a;--line:#26384d;
@@ -99,14 +99,6 @@ table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}td,th{p
  #chart{height:390px}
 }
 
-.targetwarn{
- margin:0 0 10px;padding:10px 12px;border-radius:9px;
- background:rgba(250,204,21,.08);border:1px solid rgba(250,204,21,.28);
- color:#dbe4ef;font-size:12px;line-height:1.45
-}
-.targetwarn b{color:#fde68a}
-
-
 .profilegrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .profileactions{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px;margin-top:10px}
 .profileactions.secondary{grid-template-columns:1fr 1fr}
@@ -129,7 +121,7 @@ table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}td,th{p
 </head>
 <body><div class="wrap">
 <div class="apphead">
-  <div class="brand"><div class="f1mark">F1</div><h1>Strategy Engineer <span class="version">V48</span></h1></div>
+  <div class="brand"><div class="f1mark">F1</div><h1>Strategy Engineer <span class="version">V50</span></h1></div>
   <div class="tagline">Rennstrategie-Analyse · Schnell. Klar. Fundiert.</div>
   <div class="savepill">✓ Autospeichern aktiv</div>
 </div>
@@ -264,6 +256,7 @@ const $=id=>document.getElementById(id),N=id=>parseFloat($(id).value)||0;
 const SAVE_KEY='f1_strategy_engineer';
 const SAVE_IDS=['race','raceTime','pit','sw','mw','hw','sr1','sr5','sr10','mr1','mr5','mr10','hr1','hr5','hr10','ss','ms','hs'];
 const PROFILE_KEY='f1_strategy_profiles_v1';
+const PROFILE_TOMBSTONE_KEY='f1_strategy_profile_tombstones_v1';
 const DROPBOX_CFG_KEY='f1_strategy_dropbox_cfg_v1';
 const DROPBOX_TOKEN_KEY='f1_strategy_dropbox_token_v1';
 const DROPBOX_FILE='/f1-strategy-profiles.json';
@@ -429,16 +422,21 @@ async function dropboxUploadProfiles(token,payload){
  if(!r.ok)throw new Error('upload '+r.status);
  return await r.json();
 }
-function mergeProfileMaps(local,remote){
- const merged={...local};
- Object.entries(remote||{}).forEach(([name,p])=>{
-  if(!p||!p.values)return;
-  if(!merged[name]){merged[name]=p;return}
-  const lt=Date.parse(merged[name].updatedAt||0)||0;
-  const rt=Date.parse(p.updatedAt||0)||0;
-  if(rt>lt)merged[name]=p;
+function mergeProfileState(localProfiles,localTombstones,remoteProfiles,remoteTombstones){
+ const names=new Set([...Object.keys(localProfiles||{}),...Object.keys(localTombstones||{}),...Object.keys(remoteProfiles||{}),...Object.keys(remoteTombstones||{})]);
+ const profiles={},tombstones={};
+ names.forEach(name=>{
+  const lp=localProfiles&&localProfiles[name],rp=remoteProfiles&&remoteProfiles[name];
+  const ld=localTombstones&&localTombstones[name],rd=remoteTombstones&&remoteTombstones[name];
+  const lpT=Date.parse((lp&&lp.updatedAt)||0)||0,rpT=Date.parse((rp&&rp.updatedAt)||0)||0;
+  const ldT=Date.parse((ld&&ld.deletedAt)||0)||0,rdT=Date.parse((rd&&rd.deletedAt)||0)||0;
+  const newest=Math.max(lpT,rpT,ldT,rdT);
+  if(newest===ldT&&ldT>0)tombstones[name]={deletedAt:ld.deletedAt};
+  else if(newest===rdT&&rdT>0)tombstones[name]={deletedAt:rd.deletedAt};
+  else if(newest===rpT&&rp)profiles[name]=rp;
+  else if(lp)profiles[name]=lp;
  });
- return merged;
+ return {profiles,tombstones};
 }
 async function syncDropbox(){
  const tokenObj=getDropboxToken();
@@ -448,13 +446,16 @@ async function syncDropbox(){
   const token=await refreshDropboxTokenIfNeeded();
   const remote=await dropboxDownloadProfiles(token);
   const remoteProfiles=remote&&remote.profiles&&typeof remote.profiles==='object'?remote.profiles:{};
-  const merged=mergeProfileMaps(getProfiles(),remoteProfiles);
-  setProfiles(merged);refreshProfileSelect($('profileSelect').value);
+  const remoteTombstones=remote&&remote.tombstones&&typeof remote.tombstones==='object'?remote.tombstones:{};
+  const merged=mergeProfileState(getProfiles(),getProfileTombstones(),remoteProfiles,remoteTombstones);
+  setProfiles(merged.profiles);setProfileTombstones(merged.tombstones);cleanupOldTombstones();
+  refreshProfileSelect($('profileSelect').value);
   const payload={
    app:'F1 Strategy Engineer',
-   schemaVersion:1,
+   schemaVersion:2,
    syncedAt:new Date().toISOString(),
-   profiles:merged
+   profiles:getProfiles(),
+   tombstones:getProfileTombstones()
   };
   await dropboxUploadProfiles(token,payload);
   const cfg=getDropboxCfg();cfg.lastSync=new Date().toISOString();setDropboxCfg(cfg);
@@ -475,6 +476,22 @@ async function autoSyncDropbox(){
  }
 }
 
+
+function getProfileTombstones(){
+ try{const raw=localStorage.getItem(PROFILE_TOMBSTONE_KEY);const d=raw?JSON.parse(raw):{};return d&&typeof d==='object'?d:{}}catch(e){return {}}
+}
+function setProfileTombstones(t){try{localStorage.setItem(PROFILE_TOMBSTONE_KEY,JSON.stringify(t||{}))}catch(e){}}
+function setProfileTombstone(name,deletedAt){
+ const t=getProfileTombstones();t[name]={deletedAt:deletedAt||new Date().toISOString()};setProfileTombstones(t);
+}
+function clearProfileTombstone(name){
+ const t=getProfileTombstones();if(Object.prototype.hasOwnProperty.call(t,name)){delete t[name];setProfileTombstones(t)}
+}
+function cleanupOldTombstones(days=180){
+ const t=getProfileTombstones(),cutoff=Date.now()-days*86400000;let changed=false;
+ Object.keys(t).forEach(name=>{const ts=Date.parse((t[name]&&t[name].deletedAt)||0)||0;if(ts&&ts<cutoff){delete t[name];changed=true}});
+ if(changed)setProfileTombstones(t);
+}
 function getProfiles(){
  try{const raw=localStorage.getItem(PROFILE_KEY);return raw?JSON.parse(raw):{}}catch(e){return {}}
 }
@@ -505,7 +522,7 @@ function saveCurrentProfile(){
  if(!name){setProfileStatus('Bitte einen Profilnamen bzw. eine Strecke eingeben.','warn');return}
  const p=getProfiles(),exists=!!p[name];
  if(exists&&!confirm('Das Profil „'+name+'“ existiert bereits. Wirklich aktualisieren?'))return;
- p[name]=profilePayload();setProfiles(p);refreshProfileSelect(name);
+ p[name]=profilePayload();clearProfileTombstone(name);setProfiles(p);refreshProfileSelect(name);
  setProfileStatus('Profil „'+name+'“ wurde '+(exists?'aktualisiert':'gespeichert')+'.','ok');autoSyncDropbox();
 }
 function loadSelectedProfile(){
@@ -518,13 +535,13 @@ function loadSelectedProfile(){
 function deleteSelectedProfile(){
  const name=$('profileSelect').value;if(!name){setProfileStatus('Bitte ein Profil auswählen.','warn');return}
  if(!confirm('Profil „'+name+'“ wirklich löschen?'))return;
- const p=getProfiles();delete p[name];setProfiles(p);refreshProfileSelect();
+ const p=getProfiles();delete p[name];setProfiles(p);setProfileTombstone(name,new Date().toISOString());refreshProfileSelect();
  if($('profileName').value===name)$('profileName').value='';
  setProfileStatus('Profil „'+name+'“ wurde gelöscht.','ok');autoSyncDropbox();
 }
 function exportProfiles(){
  const p=getProfiles();
- const payload={app:'F1 Strategy Engineer',schemaVersion:1,exportedAt:new Date().toISOString(),profiles:p};
+ const payload={app:'F1 Strategy Engineer',schemaVersion:2,exportedAt:new Date().toISOString(),profiles:p,tombstones:getProfileTombstones()};
  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
  const url=URL.createObjectURL(blob),a=document.createElement('a');
  a.href=url;a.download='f1-strategy-profiles-'+new Date().toISOString().slice(0,10)+'.json';
@@ -538,15 +555,21 @@ function importProfilesFromFile(file){
    const parsed=JSON.parse(r.result);
    const incoming=parsed&&parsed.profiles&&typeof parsed.profiles==='object'?parsed.profiles:null;
    if(!incoming)throw new Error();
-   const cur=getProfiles();let added=0,updated=0,skipped=0;
+   const incomingTombstones=parsed&&parsed.tombstones&&typeof parsed.tombstones==='object'?parsed.tombstones:{};
+   const cur=getProfiles(),tombs=getProfileTombstones();let added=0,updated=0,skipped=0,deleted=0;
+   Object.entries(incomingTombstones).forEach(([name,mark])=>{
+    const dt=Date.parse((mark&&mark.deletedAt)||0)||0,pt=Date.parse((cur[name]&&cur[name].updatedAt)||0)||0,ldt=Date.parse((tombs[name]&&tombs[name].deletedAt)||0)||0;
+    if(dt>Math.max(pt,ldt)){delete cur[name];tombs[name]={deletedAt:mark.deletedAt};deleted++;}
+   });
    Object.entries(incoming).forEach(([name,p])=>{
     if(!p||!p.values)return;
-    if(!cur[name]){cur[name]=p;added++;return}
-    const oldT=Date.parse(cur[name].updatedAt||0)||0,newT=Date.parse(p.updatedAt||0)||0;
-    if(newT>oldT){cur[name]=p;updated++}else skipped++;
+    const oldT=Date.parse((cur[name]&&cur[name].updatedAt)||0)||0,newT=Date.parse(p.updatedAt||0)||0,delT=Date.parse((tombs[name]&&tombs[name].deletedAt)||0)||0;
+    if(newT<=delT){skipped++;return}
+    if(!cur[name]){cur[name]=p;delete tombs[name];added++;return}
+    if(newT>oldT){cur[name]=p;delete tombs[name];updated++}else skipped++;
    });
-   setProfiles(cur);refreshProfileSelect();
-   setProfileStatus('Import: '+added+' neu, '+updated+' aktualisiert, '+skipped+' unverändert.','ok');autoSyncDropbox();
+   setProfiles(cur);setProfileTombstones(tombs);cleanupOldTombstones();refreshProfileSelect();
+   setProfileStatus('Import: '+added+' neu, '+updated+' aktualisiert, '+deleted+' gelöscht, '+skipped+' unverändert.','ok');autoSyncDropbox();
   }catch(e){setProfileStatus('Import fehlgeschlagen: ungültige Profildatei.','warn')}
  };
  r.readAsText(file);
@@ -1043,17 +1066,7 @@ function calc(){
  }
  const cards=$('strategyCards');
  const bestStrategy=picks[0]||null; cards.innerHTML='';
- const existingWarn=document.querySelector('.targetwarn'); if(existingWarn)existingWarn.remove();
- if(targetMissed){
-   const warn=document.createElement('div');
-   warn.className='targetwarn';
-   const fastest=fallbackOut.reduce((a,b)=>!a||b.total<a.total?b:a,null);
-   const gap=fastest&&raceDuration!=null?fastest.total-raceDuration:null;
-   warn.innerHTML='<b>Zielzeit derzeit nicht erreichbar.</b> Die besten gültigen Strategien werden trotzdem angezeigt.'+
-     (gap!=null&&gap>0?' Schnellste berechnete Variante liegt ca. <b>+'+formatRaceTime(gap)+'</b> über der Zielzeit.':'');
-   cards.before(warn);
- }
- const drawPaceCharts=()=>{
+const drawPaceCharts=()=>{
    document.querySelectorAll('.paceMini').forEach(cv=>{
      const idx=parseInt(cv.dataset.strategy,10);
      const sx=picks[idx];
