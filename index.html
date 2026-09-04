@@ -1,0 +1,1219 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#090e1b">
+<title>F1 Strategy Engineer V48</title>
+<style>
+:root{
+ --bg:#07101c;--panel:#0b1522;--panel2:#0e1a2a;--line:#26384d;
+ --text:#f8fafc;--muted:#9eacc0;--red:#ef3340;--yellow:#facc15;
+ --white:#e5e7eb;--green:#39d98a;--blue:#2693ff;--violet:#c084fc;
+}
+*{box-sizing:border-box}
+body{
+ margin:0;color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+ background:
+ radial-gradient(circle at 50% -20%,rgba(38,147,255,.14),transparent 34%),
+ linear-gradient(180deg,#07111e 0%,#050b13 100%);
+ padding:18px;
+}
+.wrap{max-width:1500px;margin:auto}
+.apphead{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:2px 8px 16px;border-bottom:1px solid rgba(148,163,184,.22);margin-bottom:14px}
+.brand{display:flex;align-items:center;gap:12px}
+.f1mark{font-weight:950;font-style:italic;font-size:25px;color:#ff2638;letter-spacing:-2px}
+h1{font-size:25px;margin:0;font-style:italic;letter-spacing:.2px}
+.version{font-size:11px;color:#a8b4c7;margin-left:5px;font-style:normal}
+.tagline{color:#aab8ce;font-size:13px}
+.savepill{border:1px solid rgba(57,217,138,.45);color:#79e8ad;background:rgba(22,101,52,.15);border-radius:999px;padding:7px 12px;font-size:12px;font-weight:800;white-space:nowrap}
+.card{
+ background:linear-gradient(180deg,rgba(13,25,40,.97),rgba(8,17,28,.97));
+ border:1px solid #24364b;border-radius:13px;padding:15px;margin:12px 0;
+ box-shadow:0 12px 30px rgba(0,0,0,.16);
+}
+.card h2{font-size:16px;text-transform:uppercase;letter-spacing:.35px;margin:0 0 13px;padding-bottom:10px;border-bottom:1px solid rgba(148,163,184,.18)}
+.small,.muted{color:var(--muted);font-size:12px;line-height:1.5}
+.g2{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.tyre,.metric{
+ background:linear-gradient(180deg,#0c1827,#09131f);border:1px solid #26384d;border-radius:11px;padding:13px;
+}
+.tyre>b{font-size:15px}
+.tyre:nth-child(1){border-top:2px solid var(--red)}
+.tyre:nth-child(2){border-top:2px solid var(--yellow)}
+.tyre:nth-child(3){border-top:2px solid #d8dee8}
+label{display:block;color:#aebbd0;font-size:11px;margin:8px 0 5px}
+input,select{
+ width:100%;padding:9px 10px;border-radius:8px;border:1px solid #31445d;
+ background:#0a1422;color:#fff;font-size:14px;outline:none;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.025);
+}
+input:focus{border-color:#55749a;box-shadow:0 0 0 2px rgba(38,147,255,.1)}
+button{
+ width:100%;padding:12px;margin-top:12px;border:1px solid #435872;border-radius:9px;
+ background:linear-gradient(180deg,#18263a,#111c2c);color:#fff;font-weight:850;font-size:13px;
+ text-transform:uppercase;letter-spacing:.5px;cursor:pointer;
+}
+button:hover{border-color:#6c84a4;background:#1a2a40}
+.timegrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:7px}
+.timeres{margin-top:8px;padding:8px 9px;border-radius:8px;background:#08121e;border:1px solid #203248;font-size:11px;line-height:1.55;color:#aebbd0}
+.timeres b{font-size:12px;color:#fff}
+.setctl{display:flex;align-items:center;gap:7px;margin-top:5px}
+.setctl button{width:36px;height:36px;padding:0;margin:0;border-radius:8px;font-size:18px;background:#111d2d}
+.setctl input{width:48px;text-align:center;padding:7px}
+.chartwrap{position:relative}
+#chart{
+ width:100%;height:430px;background:
+ linear-gradient(rgba(67,86,111,.10) 1px,transparent 1px),
+ linear-gradient(90deg,rgba(67,86,111,.10) 1px,transparent 1px),
+ #07111d;
+ background-size:44px 44px;border:1px solid #203248;border-radius:10px;display:block;touch-action:manipulation
+}
+.charttip{position:absolute;display:none;pointer-events:none;min-width:145px;padding:9px 11px;border-radius:8px;background:#08121e;border:1px solid #526984;color:#f8fafc;font-size:12px;line-height:1.45;box-shadow:0 10px 28px rgba(0,0,0,.35);z-index:4}
+.strats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.strat{
+ position:relative;background:linear-gradient(180deg,#0b1725,#08121d);border:1px solid #2b3d53;border-radius:11px;padding:13px;overflow:hidden
+}
+.strat:first-child{border-color:rgba(57,217,138,.7);box-shadow:inset 0 2px 0 rgba(57,217,138,.5)}
+.strat h3{margin:0 0 9px;font-size:14px;text-transform:uppercase;letter-spacing:.25px}
+.timeline{display:flex;width:100%;height:25px;border-radius:7px;overflow:hidden;margin:9px 0 11px;border:1px solid #2d4057;background:#07101b}
+.seg{display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;color:#fff;min-width:0}
+.seg.soft{background:#a91f2b}.seg.medium{background:#a77d00}.seg.hard{background:#b9c1cc;color:#09111d}
+.stint{padding:8px 9px;border-radius:8px;background:#091522;border:1px solid #1f3145;margin:6px 0;font-size:12px}
+.stopmeta{margin:6px 0;padding:7px 9px;border-radius:8px;background:#0a1420;border-left:2px solid #667a94;font-size:11px;line-height:1.5;color:#b5c0d1}
+.stratdelta{margin:8px 0;padding:7px 9px;border-radius:8px;background:rgba(57,217,138,.08);border:1px solid rgba(57,217,138,.22);font-size:11px;font-weight:700}
+.tactic{margin:7px 0;padding:8px 9px;border-radius:8px;background:#0a1420;border:1px solid #26394e;font-size:11px;line-height:1.45;color:#b7c4d6}
+.pacechart{margin:9px 0 5px;padding:8px;border-radius:8px;background:#06101b;border:1px solid #203248}
+.pacetitle{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.35px;margin-bottom:5px}
+.pacechart canvas{width:100%;height:142px!important;min-height:142px!important;display:block;background:transparent;border:0;border-radius:6px}
+.badge{display:inline-block;border:1px solid #3a4e68;border-radius:999px;padding:3px 8px;font-size:10px;color:#cbd5e1}
+.best{font-size:20px;font-weight:900;color:#86efac}
+.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.metric b{display:block;font-size:16px}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}td,th{padding:8px;border-bottom:1px solid #26384d;text-align:left}
+@media(max-width:900px){.grid3,.strats{grid-template-columns:1fr}.g2{grid-template-columns:1fr 1fr}.tagline{display:none}}
+@media(max-width:560px){
+ body{padding:9px}.apphead{align-items:flex-start}.savepill{font-size:10px;padding:6px 8px}
+ .g2,.timegrid{grid-template-columns:1fr}.card{padding:12px}.f1mark{font-size:21px}h1{font-size:19px}
+ #chart{height:390px}
+}
+
+.targetwarn{
+ margin:0 0 10px;padding:10px 12px;border-radius:9px;
+ background:rgba(250,204,21,.08);border:1px solid rgba(250,204,21,.28);
+ color:#dbe4ef;font-size:12px;line-height:1.45
+}
+.targetwarn b{color:#fde68a}
+
+
+.profilegrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.profileactions{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px;margin-top:10px}
+.profileactions.secondary{grid-template-columns:1fr 1fr}
+.profileactions button{margin-top:0}
+.profilestatus{margin-top:10px;padding:9px 10px;border:1px solid #26384d;border-radius:8px;background:#09131f;color:#9eacc0;font-size:12px;line-height:1.4}
+.profilestatus.ok{border-color:rgba(57,217,138,.35);color:#79e8ad;background:rgba(22,101,52,.10)}
+.profilestatus.warn{border-color:rgba(250,204,21,.35);color:#fde68a;background:rgba(133,77,14,.10)}
+@media(max-width:700px){.profilegrid,.profileactions,.profileactions.secondary{grid-template-columns:1fr}}
+
+
+.dropboxbox{margin-top:14px;padding-top:14px;border-top:1px solid rgba(148,163,184,.18)}
+.dropboxhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+.cloudpill{border:1px solid #31445d;border-radius:999px;padding:6px 10px;color:#9eacc0;background:#09131f;font-size:11px;font-weight:800;white-space:nowrap}
+.cloudpill.on{border-color:rgba(57,217,138,.42);color:#79e8ad;background:rgba(22,101,52,.12)}
+.dropboxactions{display:grid;grid-template-columns:2fr 1.2fr 1fr;gap:8px;margin-top:10px}
+.dropboxactions button{margin-top:0}
+@media(max-width:700px){.dropboxactions{grid-template-columns:1fr}.dropboxhead{align-items:flex-start;flex-direction:column}}
+
+</style>
+</head>
+<body><div class="wrap">
+<div class="apphead">
+  <div class="brand"><div class="f1mark">F1</div><h1>Strategy Engineer <span class="version">V48</span></h1></div>
+  <div class="tagline">Rennstrategie-Analyse · Schnell. Klar. Fundiert.</div>
+  <div class="savepill">✓ Autospeichern aktiv</div>
+</div>
+
+
+<div class="card">
+<h2>Streckenprofile</h2>
+<p class="small">Aktuelle Strecken- und Reifendaten als Profil speichern, später laden oder für ein anderes Gerät exportieren/importieren.</p>
+<div class="profilegrid">
+  <div><label>Profilname / Strecke</label><input id="profileName" type="text" placeholder="z. B. Monza"></div>
+  <div><label>Gespeichertes Profil</label><select id="profileSelect"><option value="">– Profil auswählen –</option></select></div>
+</div>
+<div class="profileactions">
+  <button type="button" id="profileSaveBtn">PROFIL SPEICHERN / AKTUALISIEREN</button>
+  <button type="button" id="profileLoadBtn">PROFIL LADEN</button>
+  <button type="button" id="profileDeleteBtn">PROFIL LÖSCHEN</button>
+</div>
+<div class="profileactions secondary">
+  <button type="button" id="profileExportBtn">PROFILE EXPORTIEREN</button>
+  <button type="button" id="profileImportBtn">PROFILE IMPORTIEREN</button>
+  <input id="profileImportFile" type="file" accept=".json,application/json" style="display:none">
+</div>
+<div id="profileStatus" class="profilestatus">Noch kein Profil ausgewählt.</div>
+
+<div class="dropboxbox">
+  <div class="dropboxhead">
+    <div><b>☁ Dropbox Sync</b><div class="small">Synchronisiert alle Streckenprofile über deine Dropbox.</div></div>
+    <div id="dropboxState" class="cloudpill">Nicht verbunden</div>
+  </div>
+  <div class="profilegrid">
+    <div>
+      <label>Dropbox App Key</label>
+      <input id="dropboxAppKey" type="text" placeholder="App Key aus der Dropbox Developer Console">
+    </div>
+    <div>
+      <label>Redirect-URI</label>
+      <input id="dropboxRedirectUri" type="text" readonly>
+    </div>
+  </div>
+  <div class="dropboxactions">
+    <button type="button" id="dropboxConnectBtn">MIT DROPBOX VERBINDEN</button>
+    <button type="button" id="dropboxSyncBtn">JETZT SYNCHRONISIEREN</button>
+    <button type="button" id="dropboxDisconnectBtn">TRENNEN</button>
+  </div>
+  <div id="dropboxStatus" class="profilestatus">Für die Anmeldung muss die App über HTTPS oder localhost geöffnet werden.</div>
+</div>
+</div>
+
+<div class="card">
+<h2>Rennsetup</h2>
+<div class="g2">
+<div><label>Renndistanz (Runden)</label><input id="race" type="number" min="5" value="50"></div>
+<div><label>Rennlänge / Gesamtrennzeit</label><input id="raceTime" type="text" inputmode="decimal" value="42:56,738" placeholder="42:56,738"></div><div><label>Boxenstopp-Verlust (Sek.)</label><input id="pit" type="number" min="0" step=".1" value="22"></div>
+
+</div>
+
+</div>
+
+<div class="card">
+<h2>Reifendaten</h2><p class="small" style="margin-top:-5px">10-Runden-Kalibrierung: Runde 1, 5 und 10 plus Verschleiß nach Runde 10 eintragen. Die Pace-Kurve wird daraus automatisch abgeleitet.</p>
+<div class="grid3">
+<div class="tyre"><b><span style="color:#ef3340">●</span> Soft</b>
+<label>Abnutzung nach 10 Runden (%)</label><input id="sw" type="number" value="55" step=".1" min=".1">
+<div class="timegrid">
+  <div><label>Runde 1</label><input id="sr1" type="text" inputmode="decimal" value="1:22,800" placeholder="1:23,456"></div>
+  <div><label>Runde 5</label><input id="sr5" type="text" inputmode="decimal" value="1:23,200" placeholder="1:23,456"></div>
+</div>
+<div style="margin-top:7px">
+  <label>Runde 10</label><input id="sr10" type="text" inputmode="decimal" value="1:24,200" placeholder="1:23,456">
+</div>
+<div class="timeres">
+  Gemessene/abgeleitete Ø-Rundenzeit: <b id="savg">–</b><br>
+  Abgeleitete 10-Runden-Stintzeit: <b id="sstint10">–</b>
+</div><label>Verfügbare Sätze</label><div class="setctl"><button type="button" class="setbtn" data-target="ss" data-delta="-1">−</button><input id="ss" type="number" value="2" min="0" step="1" readonly><button type="button" class="setbtn" data-target="ss" data-delta="1">+</button></div>
+
+
+</div>
+<div class="tyre"><b><span style="color:#facc15">●</span> Medium</b>
+<label>Abnutzung nach 10 Runden (%)</label><input id="mw" type="number" value="42" step=".1" min=".1">
+<div class="timegrid">
+  <div><label>Runde 1</label><input id="mr1" type="text" inputmode="decimal" value="1:23,600" placeholder="1:23,456"></div>
+  <div><label>Runde 5</label><input id="mr5" type="text" inputmode="decimal" value="1:24,000" placeholder="1:23,456"></div>
+</div>
+<div style="margin-top:7px">
+  <label>Runde 10</label><input id="mr10" type="text" inputmode="decimal" value="1:25,000" placeholder="1:23,456">
+</div>
+<div class="timeres">
+  Gemessene/abgeleitete Ø-Rundenzeit: <b id="mavg">–</b><br>
+  Abgeleitete 10-Runden-Stintzeit: <b id="mstint10">–</b>
+</div><label>Verfügbare Sätze</label><div class="setctl"><button type="button" class="setbtn" data-target="ms" data-delta="-1">−</button><input id="ms" type="number" value="2" min="0" step="1" readonly><button type="button" class="setbtn" data-target="ms" data-delta="1">+</button></div>
+
+
+</div>
+<div class="tyre"><b><span style="color:#e5e7eb">●</span> Hard</b>
+<label>Abnutzung nach 10 Runden (%)</label><input id="hw" type="number" value="30" step=".1" min=".1">
+<div class="timegrid">
+  <div><label>Runde 1</label><input id="hr1" type="text" inputmode="decimal" value="1:24,400" placeholder="1:23,456"></div>
+  <div><label>Runde 5</label><input id="hr5" type="text" inputmode="decimal" value="1:24,800" placeholder="1:23,456"></div>
+</div>
+<div style="margin-top:7px">
+  <label>Runde 10</label><input id="hr10" type="text" inputmode="decimal" value="1:25,800" placeholder="1:23,456">
+</div>
+<div class="timeres">
+  Gemessene/abgeleitete Ø-Rundenzeit: <b id="havg">–</b><br>
+  Abgeleitete 10-Runden-Stintzeit: <b id="hstint10">–</b>
+</div><label>Verfügbare Sätze</label><div class="setctl"><button type="button" class="setbtn" data-target="hs" data-delta="-1">−</button><input id="hs" type="number" value="2" min="0" step="1" readonly><button type="button" class="setbtn" data-target="hs" data-delta="1">+</button></div>
+
+
+</div>
+</div>
+<button onclick="calc()">STRATEGIE BERECHNEN</button>
+</div>
+
+<div class="card">
+<h2>Reifenlebensdauer</h2>
+<div class="chartwrap"><canvas id="chart"></canvas><div id="chartTip" class="charttip" role="status" aria-live="polite"></div></div>
+<p class="small">Die horizontale Achse zeigt ausschließlich die Reifenrunden. Die Verschleißkurven werden aus deiner 10-Runden-Messung berechnet.</p>
+</div>
+
+
+
+<div class="card">
+<h2>Strategie A / B / C</h2>
+<div id="strategyCards" class="strats"></div>
+<p class="small">A = schnellste sinnvolle Strategie, B = nächstschnelle Alternative, C = reifenschonendere Alternative. Die Strategie berücksichtigt Reifenverschleiß, progressiven Pace-Abbau, Boxenstopp-Verlust und die verfügbaren Reifensätze.</p>
+</div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id),N=id=>parseFloat($(id).value)||0;
+
+const SAVE_KEY='f1_strategy_engineer';
+const SAVE_IDS=['race','raceTime','pit','sw','mw','hw','sr1','sr5','sr10','mr1','mr5','mr10','hr1','hr5','hr10','ss','ms','hs'];
+const PROFILE_KEY='f1_strategy_profiles_v1';
+const DROPBOX_CFG_KEY='f1_strategy_dropbox_cfg_v1';
+const DROPBOX_TOKEN_KEY='f1_strategy_dropbox_token_v1';
+const DROPBOX_FILE='/f1-strategy-profiles.json';
+
+function b64url(bytes){
+ let s=''; bytes.forEach(b=>s+=String.fromCharCode(b));
+ return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+}
+async function sha256(text){
+ return new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text)));
+}
+function randomVerifier(){
+ const bytes=new Uint8Array(48);crypto.getRandomValues(bytes);return b64url(bytes);
+}
+function getDropboxCfg(){
+ try{return JSON.parse(localStorage.getItem(DROPBOX_CFG_KEY)||'{}')}catch(e){return {}}
+}
+function setDropboxCfg(cfg){try{localStorage.setItem(DROPBOX_CFG_KEY,JSON.stringify(cfg))}catch(e){}}
+function getDropboxToken(){
+ try{return JSON.parse(localStorage.getItem(DROPBOX_TOKEN_KEY)||'null')}catch(e){return null}
+}
+function setDropboxToken(t){
+ try{
+  if(t)localStorage.setItem(DROPBOX_TOKEN_KEY,JSON.stringify(t));
+  else localStorage.removeItem(DROPBOX_TOKEN_KEY);
+ }catch(e){}
+}
+function currentRedirectUri(){
+ if(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1'){
+  return location.origin+location.pathname;
+ }
+ return '';
+}
+function setDropboxStatus(text,type=''){
+ const el=$('dropboxStatus');if(!el)return;
+ el.textContent=text;el.className='profilestatus'+(type?' '+type:'');
+}
+function updateDropboxState(){
+ const token=getDropboxToken(),pill=$('dropboxState');
+ if(!pill)return;
+ if(token&&token.access_token){
+  pill.textContent='Verbunden';pill.className='cloudpill on';
+ }else{
+  pill.textContent='Nicht verbunden';pill.className='cloudpill';
+ }
+}
+function saveDropboxConfigFromUI(){
+ const cfg=getDropboxCfg();
+ cfg.appKey=($('dropboxAppKey').value||'').trim();
+ cfg.redirectUri=currentRedirectUri();
+ setDropboxCfg(cfg);
+}
+async function connectDropbox(){
+ saveDropboxConfigFromUI();
+ const cfg=getDropboxCfg();
+ if(!cfg.appKey){setDropboxStatus('Bitte zuerst den Dropbox App Key eintragen.','warn');return}
+ if(!currentRedirectUri()){
+  setDropboxStatus('Dropbox OAuth benötigt HTTPS oder localhost. Öffne diese HTML-Datei über einen kleinen Webserver bzw. eine HTTPS-Adresse.','warn');return;
+ }
+ if(!window.crypto||!crypto.subtle){
+  setDropboxStatus('Dieser Browser stellt Web Crypto für PKCE nicht bereit.','warn');return;
+ }
+ const verifier=randomVerifier();
+ const challenge=b64url(await sha256(verifier));
+ sessionStorage.setItem('dbx_pkce_verifier',verifier);
+ const state=b64url(crypto.getRandomValues(new Uint8Array(18)));
+ sessionStorage.setItem('dbx_oauth_state',state);
+ const params=new URLSearchParams({
+  client_id:cfg.appKey,
+  response_type:'code',
+  code_challenge:challenge,
+  code_challenge_method:'S256',
+  token_access_type:'offline',
+  redirect_uri:cfg.redirectUri,
+  state
+ });
+ location.href='https://www.dropbox.com/oauth2/authorize?'+params.toString();
+}
+async function handleDropboxCallback(){
+ const q=new URLSearchParams(location.search);
+ const code=q.get('code');
+ if(!code)return;
+ const returnedState=q.get('state');
+ const expectedState=sessionStorage.getItem('dbx_oauth_state');
+ if(!expectedState||returnedState!==expectedState){
+  setDropboxStatus('Dropbox-Anmeldung abgebrochen: ungültiger OAuth-Status.','warn');return;
+ }
+ const verifier=sessionStorage.getItem('dbx_pkce_verifier');
+ const cfg=getDropboxCfg();
+ if(!verifier||!cfg.appKey||!cfg.redirectUri){
+  setDropboxStatus('Dropbox-Anmeldung konnte nicht abgeschlossen werden.','warn');return;
+ }
+ try{
+  const body=new URLSearchParams({
+   code,
+   grant_type:'authorization_code',
+   client_id:cfg.appKey,
+   redirect_uri:cfg.redirectUri,
+   code_verifier:verifier
+  });
+  const r=await fetch('https://api.dropboxapi.com/oauth2/token',{
+   method:'POST',
+   headers:{'Content-Type':'application/x-www-form-urlencoded'},
+   body
+  });
+  if(!r.ok)throw new Error('Token '+r.status);
+  const t=await r.json();
+  t.saved_at=Date.now();
+  setDropboxToken(t);
+  sessionStorage.removeItem('dbx_pkce_verifier');
+  sessionStorage.removeItem('dbx_oauth_state');
+  history.replaceState({},document.title,location.pathname);
+  updateDropboxState();
+  setDropboxStatus('Dropbox verbunden. Profile können jetzt synchronisiert werden.','ok');
+  await syncDropbox();
+ }catch(e){
+  setDropboxStatus('Dropbox-Anmeldung fehlgeschlagen. Prüfe App Key und Redirect-URI.','warn');
+ }
+}
+async function refreshDropboxTokenIfNeeded(){
+ let t=getDropboxToken();
+ if(!t)return null;
+ const expiresMs=(t.expires_in||14400)*1000;
+ if(t.saved_at && Date.now()<t.saved_at+expiresMs-120000)return t.access_token;
+ if(!t.refresh_token)return t.access_token;
+ const cfg=getDropboxCfg();
+ const body=new URLSearchParams({
+  grant_type:'refresh_token',
+  refresh_token:t.refresh_token,
+  client_id:cfg.appKey
+ });
+ const r=await fetch('https://api.dropboxapi.com/oauth2/token',{
+  method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body
+ });
+ if(!r.ok)throw new Error('refresh');
+ const fresh=await r.json();
+ t={...t,...fresh,saved_at:Date.now()};
+ setDropboxToken(t);
+ return t.access_token;
+}
+async function dropboxDownloadProfiles(token){
+ const r=await fetch('https://content.dropboxapi.com/2/files/download',{
+  method:'POST',
+  headers:{
+   'Authorization':'Bearer '+token,
+   'Dropbox-API-Arg':JSON.stringify({path:DROPBOX_FILE})
+  }
+ });
+ if(r.status===409)return null;
+ if(!r.ok)throw new Error('download '+r.status);
+ return await r.json();
+}
+async function dropboxUploadProfiles(token,payload){
+ const r=await fetch('https://content.dropboxapi.com/2/files/upload',{
+  method:'POST',
+  headers:{
+   'Authorization':'Bearer '+token,
+   'Content-Type':'application/octet-stream',
+   'Dropbox-API-Arg':JSON.stringify({path:DROPBOX_FILE,mode:'overwrite',autorename:false,mute:true})
+  },
+  body:JSON.stringify(payload,null,2)
+ });
+ if(!r.ok)throw new Error('upload '+r.status);
+ return await r.json();
+}
+function mergeProfileMaps(local,remote){
+ const merged={...local};
+ Object.entries(remote||{}).forEach(([name,p])=>{
+  if(!p||!p.values)return;
+  if(!merged[name]){merged[name]=p;return}
+  const lt=Date.parse(merged[name].updatedAt||0)||0;
+  const rt=Date.parse(p.updatedAt||0)||0;
+  if(rt>lt)merged[name]=p;
+ });
+ return merged;
+}
+async function syncDropbox(){
+ const tokenObj=getDropboxToken();
+ if(!tokenObj||!tokenObj.access_token){setDropboxStatus('Dropbox ist nicht verbunden.','warn');return}
+ setDropboxStatus('Synchronisierung läuft …');
+ try{
+  const token=await refreshDropboxTokenIfNeeded();
+  const remote=await dropboxDownloadProfiles(token);
+  const remoteProfiles=remote&&remote.profiles&&typeof remote.profiles==='object'?remote.profiles:{};
+  const merged=mergeProfileMaps(getProfiles(),remoteProfiles);
+  setProfiles(merged);refreshProfileSelect($('profileSelect').value);
+  const payload={
+   app:'F1 Strategy Engineer',
+   schemaVersion:1,
+   syncedAt:new Date().toISOString(),
+   profiles:merged
+  };
+  await dropboxUploadProfiles(token,payload);
+  const cfg=getDropboxCfg();cfg.lastSync=new Date().toISOString();setDropboxCfg(cfg);
+  setDropboxStatus('Synchronisiert · '+new Date(cfg.lastSync).toLocaleString('de-DE'),'ok');
+  updateDropboxState();
+ }catch(e){
+  setDropboxStatus('Dropbox-Synchronisierung fehlgeschlagen. Verbindung oder Berechtigungen prüfen.','warn');
+ }
+}
+function disconnectDropbox(){
+ if(!confirm('Dropbox-Verbindung auf diesem Gerät trennen? Deine lokalen Streckenprofile bleiben erhalten.'))return;
+ setDropboxToken(null);updateDropboxState();
+ setDropboxStatus('Dropbox wurde auf diesem Gerät getrennt.');
+}
+async function autoSyncDropbox(){
+ if(getDropboxToken()){
+  try{await syncDropbox()}catch(e){}
+ }
+}
+
+function getProfiles(){
+ try{const raw=localStorage.getItem(PROFILE_KEY);return raw?JSON.parse(raw):{}}catch(e){return {}}
+}
+function setProfiles(p){try{localStorage.setItem(PROFILE_KEY,JSON.stringify(p))}catch(e){}}
+function profilePayload(){
+ const values={}; SAVE_IDS.forEach(id=>{const el=$(id);if(el)values[id]=el.value});
+ return {version:1,updatedAt:new Date().toISOString(),values};
+}
+function applyProfile(p){
+ if(!p||!p.values)return;
+ SAVE_IDS.forEach(id=>{const el=$(id);if(el&&Object.prototype.hasOwnProperty.call(p.values,id))el.value=p.values[id]});
+ saveInputs();updateAllTyreTimes();calc();
+}
+function setProfileStatus(text,type=''){
+ const el=$('profileStatus');if(!el)return;
+ el.textContent=text;el.className='profilestatus'+(type?' '+type:'');
+}
+function refreshProfileSelect(selected=''){
+ const sel=$('profileSelect');if(!sel)return;
+ const p=getProfiles();sel.innerHTML='<option value="">– Profil auswählen –</option>';
+ Object.keys(p).sort((a,b)=>a.localeCompare(b,'de')).forEach(name=>{
+  const o=document.createElement('option');o.value=name;o.textContent=name;sel.appendChild(o);
+ });
+ if(selected&&p[selected])sel.value=selected;
+}
+function saveCurrentProfile(){
+ const name=($('profileName').value||'').trim();
+ if(!name){setProfileStatus('Bitte einen Profilnamen bzw. eine Strecke eingeben.','warn');return}
+ const p=getProfiles(),exists=!!p[name];
+ if(exists&&!confirm('Das Profil „'+name+'“ existiert bereits. Wirklich aktualisieren?'))return;
+ p[name]=profilePayload();setProfiles(p);refreshProfileSelect(name);
+ setProfileStatus('Profil „'+name+'“ wurde '+(exists?'aktualisiert':'gespeichert')+'.','ok');autoSyncDropbox();
+}
+function loadSelectedProfile(){
+ const name=$('profileSelect').value;if(!name){setProfileStatus('Bitte ein Profil auswählen.','warn');return}
+ const p=getProfiles()[name];if(!p){setProfileStatus('Profil nicht gefunden.','warn');refreshProfileSelect();return}
+ $('profileName').value=name;applyProfile(p);
+ const when=p.updatedAt?new Date(p.updatedAt).toLocaleString('de-DE'):'unbekannt';
+ setProfileStatus('Profil „'+name+'“ geladen · zuletzt geändert '+when+'.','ok');
+}
+function deleteSelectedProfile(){
+ const name=$('profileSelect').value;if(!name){setProfileStatus('Bitte ein Profil auswählen.','warn');return}
+ if(!confirm('Profil „'+name+'“ wirklich löschen?'))return;
+ const p=getProfiles();delete p[name];setProfiles(p);refreshProfileSelect();
+ if($('profileName').value===name)$('profileName').value='';
+ setProfileStatus('Profil „'+name+'“ wurde gelöscht.','ok');autoSyncDropbox();
+}
+function exportProfiles(){
+ const p=getProfiles();
+ const payload={app:'F1 Strategy Engineer',schemaVersion:1,exportedAt:new Date().toISOString(),profiles:p};
+ const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+ const url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download='f1-strategy-profiles-'+new Date().toISOString().slice(0,10)+'.json';
+ document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+ setProfileStatus(Object.keys(p).length+' Profil(e) exportiert.','ok');
+}
+function importProfilesFromFile(file){
+ const r=new FileReader();
+ r.onload=()=>{
+  try{
+   const parsed=JSON.parse(r.result);
+   const incoming=parsed&&parsed.profiles&&typeof parsed.profiles==='object'?parsed.profiles:null;
+   if(!incoming)throw new Error();
+   const cur=getProfiles();let added=0,updated=0,skipped=0;
+   Object.entries(incoming).forEach(([name,p])=>{
+    if(!p||!p.values)return;
+    if(!cur[name]){cur[name]=p;added++;return}
+    const oldT=Date.parse(cur[name].updatedAt||0)||0,newT=Date.parse(p.updatedAt||0)||0;
+    if(newT>oldT){cur[name]=p;updated++}else skipped++;
+   });
+   setProfiles(cur);refreshProfileSelect();
+   setProfileStatus('Import: '+added+' neu, '+updated+' aktualisiert, '+skipped+' unverändert.','ok');autoSyncDropbox();
+  }catch(e){setProfileStatus('Import fehlgeschlagen: ungültige Profildatei.','warn')}
+ };
+ r.readAsText(file);
+}
+
+
+function collectInputs(){
+ const data={};
+ SAVE_IDS.forEach(id=>{
+  const el=$(id);
+  if(el)data[id]=el.value;
+ });
+ return data;
+}
+function saveInputs(){
+ const raw=JSON.stringify(collectInputs());
+ try{localStorage.setItem(SAVE_KEY,raw);}catch(e){}
+ try{window.name=SAVE_KEY+'|'+raw;}catch(e){}
+}
+function loadInputs(){
+ let raw=null;
+ try{raw=localStorage.getItem(SAVE_KEY);}catch(e){}
+ if(!raw){
+  try{
+   const prefix=SAVE_KEY+'|';
+   if(window.name && window.name.startsWith(prefix))raw=window.name.slice(prefix.length);
+  }catch(e){}
+ }
+ if(!raw)return;
+ try{
+  const data=JSON.parse(raw);
+
+  // Migration from V45: fastest -> R1, slowest -> R10, R5 as midpoint.
+  ['s','m','h'].forEach(p=>{
+   if(data[p+'r1']==null && data[p+'fast']!=null)data[p+'r1']=data[p+'fast'];
+   if(data[p+'r10']==null && data[p+'slow']!=null)data[p+'r10']=data[p+'slow'];
+   if(data[p+'r5']==null && data[p+'fast']!=null && data[p+'slow']!=null){
+    const a=parseTime(data[p+'fast']),b=parseTime(data[p+'slow']);
+    if(a!=null&&b!=null)data[p+'r5']=formatRaceTime(a+(b-a)*0.36);
+   }
+  });
+
+  SAVE_IDS.forEach(id=>{
+   const el=$(id);
+   if(el && Object.prototype.hasOwnProperty.call(data,id))el.value=data[id];
+  });
+ }catch(e){}
+}
+
+function parseTime(v){
+  if(!v)return null;
+  v=String(v).trim().replace('.',',');
+  const m=v.match(/^(\d+):([0-5]?\d)(?:,(\d{1,3}))?$/);
+  if(!m)return null;
+  const min=parseInt(m[1],10), sec=parseInt(m[2],10);
+  const ms=parseInt((m[3]||'0').padEnd(3,'0').slice(0,3),10);
+  return min*60000+sec*1000+ms;
+}
+function parseLapTime(v){return parseTime(v);}
+function formatRaceTime(ms){
+  if(ms==null||!isFinite(ms))return '–';
+  ms=Math.round(ms);
+  const min=Math.floor(ms/60000);
+  const sec=Math.floor((ms%60000)/1000);
+  const milli=ms%1000;
+  return min+':'+String(sec).padStart(2,'0')+','+String(milli).padStart(3,'0');
+}
+function updateTyreTimes(p){
+  const r1=parseLapTime($(p+'r1').value);
+  const r5=parseLapTime($(p+'r5').value);
+  const r10=parseLapTime($(p+'r10').value);
+  if(r1==null||r5==null||r10==null){
+    $(p+'avg').textContent='Ungültiges Format';
+    $(p+'stint10').textContent='–';
+    return;
+  }
+  const t={r1,r5,r10};
+  let total=0;
+  for(let lap=1;lap<=10;lap++)total+=lapTimeAtStintLap(t,lap);
+  $(p+'avg').textContent=formatRaceTime(total/10);
+  $(p+'stint10').textContent=formatRaceTime(total);
+}
+function updateAllTyreTimes(){['s','m','h'].forEach(updateTyreTimes);}
+function chgSet(id,delta){
+ const el=$(id);
+ if(!el)return;
+ el.value=Math.max(0,(parseInt(el.value,10)||0)+delta);
+ saveInputs();
+ calc();
+}
+const raceTimeInput=$('raceTime');if(raceTimeInput)raceTimeInput.addEventListener('input',calc);
+['sr1','sr5','sr10','mr1','mr5','mr10','hr1','hr5','hr10'].forEach(id=>{
+ const el=$(id);
+ if(el)el.addEventListener('input',updateAllTyreTimes);
+});
+
+SAVE_IDS.forEach(id=>{
+ const el=$(id);
+ if(!el)return;
+ el.addEventListener('input',saveInputs);
+ el.addEventListener('change',saveInputs);
+});
+
+
+
+const cfg0=getDropboxCfg();
+if($('dropboxAppKey'))$('dropboxAppKey').value=cfg0.appKey||'';
+if($('dropboxRedirectUri'))$('dropboxRedirectUri').value=currentRedirectUri()||'Nur über HTTPS / localhost verfügbar';
+if(cfg0.lastSync)setDropboxStatus('Zuletzt synchronisiert · '+new Date(cfg0.lastSync).toLocaleString('de-DE'),getDropboxToken()?'ok':'');
+updateDropboxState();
+
+const dropboxConnectBtn=$('dropboxConnectBtn');if(dropboxConnectBtn)dropboxConnectBtn.addEventListener('click',connectDropbox);
+const dropboxSyncBtn=$('dropboxSyncBtn');if(dropboxSyncBtn)dropboxSyncBtn.addEventListener('click',syncDropbox);
+const dropboxDisconnectBtn=$('dropboxDisconnectBtn');if(dropboxDisconnectBtn)dropboxDisconnectBtn.addEventListener('click',disconnectDropbox);
+const dropboxAppKey=$('dropboxAppKey');if(dropboxAppKey)dropboxAppKey.addEventListener('change',saveDropboxConfigFromUI);
+
+handleDropboxCallback();
+
+const profileSaveBtn=$('profileSaveBtn');if(profileSaveBtn)profileSaveBtn.addEventListener('click',saveCurrentProfile);
+const profileLoadBtn=$('profileLoadBtn');if(profileLoadBtn)profileLoadBtn.addEventListener('click',loadSelectedProfile);
+const profileDeleteBtn=$('profileDeleteBtn');if(profileDeleteBtn)profileDeleteBtn.addEventListener('click',deleteSelectedProfile);
+const profileExportBtn=$('profileExportBtn');if(profileExportBtn)profileExportBtn.addEventListener('click',exportProfiles);
+const profileImportBtn=$('profileImportBtn');if(profileImportBtn)profileImportBtn.addEventListener('click',()=>$('profileImportFile').click());
+const profileImportFile=$('profileImportFile');
+if(profileImportFile)profileImportFile.addEventListener('change',()=>{
+ const f=profileImportFile.files&&profileImportFile.files[0];if(f)importProfilesFromFile(f);profileImportFile.value='';
+});
+const profileSelect=$('profileSelect');
+if(profileSelect)profileSelect.addEventListener('change',()=>{
+ const name=profileSelect.value;if(name){$('profileName').value=name;const p=getProfiles()[name];
+ const when=p&&p.updatedAt?new Date(p.updatedAt).toLocaleString('de-DE'):'unbekannt';
+ setProfileStatus('Profil „'+name+'“ ausgewählt · zuletzt geändert '+when+'.');
+ }else setProfileStatus('Noch kein Profil ausgewählt.');
+});
+refreshProfileSelect();
+
+document.querySelectorAll('.setbtn').forEach(btn=>{
+ btn.addEventListener('click',function(){
+  chgSet(this.dataset.target,parseInt(this.dataset.delta,10)||0);
+ });
+});
+function tyre(p){
+ const r1=parseLapTime($(p+'r1').value);
+ const r5=parseLapTime($(p+'r5').value);
+ const r10=parseLapTime($(p+'r10').value);
+ return{
+  name:p==='s'?'Soft':p==='m'?'Medium':'Hard',
+  wear:N(p+'w')/10,
+  sets:Math.max(0,Math.floor(N(p+'s'))),
+  r1,r5,r10,
+  fast:r1,
+  slow:r10,
+  avg:(r1!=null&&r5!=null&&r10!=null)?(r1+r5+r10)/3:null
+ };
+}
+function wearAt(t,l){return t.wear*l}
+function lapTimeAtStintLap(t,lap){
+ if(t.r1==null||t.r5==null||t.r10==null)return null;
+ lap=Math.max(1,lap);
+
+ // Direkte Kalibrierung aus dem 10-Runden-Test:
+ // R1 -> R5 und R5 -> R10 bilden die gemessene Deg-Kurve.
+ if(lap<=5){
+  const u=(lap-1)/4;
+  return t.r1+(t.r5-t.r1)*Math.pow(u,1.15);
+ }
+ if(lap<=10){
+  const u=(lap-5)/5;
+  return t.r5+(t.r10-t.r5)*Math.pow(u,1.25);
+ }
+
+ // Nach Runde 10 wird nur der tatsächlich gemessene späte Pace-Abbau
+ // fortgeschrieben. Keine festen Soft/Medium/Hard-Peakfenster mehr.
+ const lateGap=t.r10-t.r5;
+ const perLap=lateGap/5;
+ const extra=lap-10;
+ const progressive=1+0.04*Math.pow(extra,1.18);
+ return t.r10 + perLap*extra*progressive;
+}
+function stintTime(t,laps){
+ let total=0;
+ for(let lap=1;lap<=laps;lap++){
+  const lapTime=lapTimeAtStintLap(t,lap);
+  if(lapTime==null)return Infinity;
+  total+=lapTime;
+ }
+ return total;
+}
+function wearPreference(endWears){
+ // Tier 0: every stint ends in the ideal 60–70% window.
+ // Tier 1: no stint exceeds 70%, but one or more end below 60%.
+ // Tier 2: at least one stint exceeds 70%; >80% is allowed only when needed.
+ let tier=0, deviation=0, over70=0, over80=0;
+ endWears.forEach(w=>{
+  if(w>70){
+   tier=2;
+   over70+=w-70;
+   if(w>80)over80+=w-80;
+  }else if(w<60){
+   if(tier<1)tier=1;
+   deviation+=60-w;
+  }
+ });
+ return {tier,deviation,over70,over80};
+}
+function strategyCompare(a,b){
+ const pa=a.pref, pb=b.pref;
+ return pa.tier-pb.tier
+   || pa.over80-pb.over80
+   || pa.over70-pb.over70
+   || pa.deviation-pb.deviation
+   || a.total-b.total
+   || a.maxWear-b.maxWear
+   || a.stops-b.stops;
+}
+function roundAt(t,z){return z/t.wear}
+function validStint(t,laps,limit){return laps>=1 && t.fast!=null && t.slow!=null && wearAt(t,laps)<=limit}
+function pitWindow(x,j,T,R,L){
+ const opt=x.pits[j], tyre=T[x.seq[j]];
+ const prev=j===0?0:x.pits[j-1];
+ const stintAtOpt=opt-prev;
+ // Preferred stop window is 60–70%; later stops remain possible up to 100% when needed.
+ const maxStint=Math.floor(L/tyre.wear);
+ const latest=Math.min(R-1, prev+maxStint);
+ // Earliest sensible stop: don't throw away more than ~15 percentage points
+ // of usable tyre life compared with the current fallback limit.
+ const minUsefulWear=Math.max(0,L-15);
+ const minStint=Math.max(1,Math.ceil(minUsefulWear/tyre.wear));
+ const earliest=Math.min(opt,Math.max(prev+1,prev+minStint));
+ return {earliest,latest:Math.max(opt,latest),opt};
+}
+function setsNeeded(seq){
+ const c=[0,0,0]; seq.forEach(i=>c[i]++); return c;
+}
+function enoughSets(seq,T){
+ const n=setsNeeded(seq); return n.every((v,i)=>v<=T[i].sets);
+}
+function strategyLabel(i){return i===0?'Strategie A · Schnellste':i===1?'Strategie B · Alternative':'Strategie C · Sicher'}
+function strategyClass(i){return i===0?'A':i===1?'B':'C'}
+
+
+function strategyDeltaText(x,best){
+ if(!best || x===best)return 'Schnellste Strategie';
+ const d=x.total-best.total;
+ return '+'+formatRaceTime(d)+' gegenüber Strategie A';
+}
+function tacticalHint(x,T,R,P){
+ if(!x || !x.pits || !x.pits.length)return '';
+ let hints=[];
+ x.pits.forEach((pitLap,j)=>{
+   const prev=j===0?0:x.pits[j-1];
+   const next=j===x.pits.length-1?R:x.pits[j+1];
+   const tyre=T[x.seq[j]];
+   const stintLen=pitLap-prev;
+   const currentLapTime=lapTimeAtStintLap(tyre,Math.max(1,stintLen));
+   const nextTyre=T[x.seq[j+1]];
+   const freshNext=lapTimeAtStintLap(nextTyre,1);
+   if(currentLapTime==null||freshNext==null)return;
+   const gainPerLap=currentLapTime-freshNext;
+   if(gainPerLap>800){
+     hints.push('Undercut-Potenzial vor Stopp '+(j+1)+': frischer '+nextTyre.name+' ist deutlich schneller.');
+   }else if(gainPerLap<250){
+     hints.push('Overcut möglich vor Stopp '+(j+1)+': aktueller '+tyre.name+' verliert noch wenig Pace.');
+   }else{
+     hints.push('Stopp '+(j+1)+' liegt nahe am neutralen Wechselpunkt.');
+   }
+ });
+ return hints.join(' ');
+}
+function paceSeriesForStrategy(x,T,R){
+ const points=[];
+ let lapNo=1;
+ for(let j=0;j<x.seq.length;j++){
+   const tyre=T[x.seq[j]];
+   const stintLaps=j===0?x.pits[0]:(j<x.pits.length?x.pits[j]-x.pits[j-1]:R-x.pits[x.pits.length-1]);
+   for(let k=1;k<=stintLaps;k++){
+     points.push({lap:lapNo,time:lapTimeAtStintLap(tyre,k),tyre:tyre.name});
+     lapNo++;
+   }
+ }
+ return points;
+}
+function drawPaceMini(canvas,series,strategy,T,R){
+ if(!canvas||!series||!series.length)return;
+ const d=window.devicePixelRatio||1;
+ const w=Math.max(240,canvas.clientWidth||canvas.parentElement?.clientWidth||300);
+ const h=142;
+ canvas.width=Math.round(w*d);
+ canvas.height=Math.round(h*d);
+ canvas.style.height=h+'px';
+
+ const ctx=canvas.getContext('2d');
+ ctx.setTransform(d,0,0,d,0,0);
+ ctx.clearRect(0,0,w,h);
+
+ const p={l:42,r:10,t:28,b:24},pw=w-52,ph=h-52;
+ const vals=series.map(v=>v.time).filter(Number.isFinite);
+ if(!vals.length)return;
+
+ let min=Math.min(...vals),max=Math.max(...vals);
+ const pad=Math.max(250,(max-min)*0.12);
+ min-=pad; max+=pad;
+ if(max<=min)max=min+1000;
+
+ ctx.strokeStyle='#334155';
+ ctx.lineWidth=1;
+ ctx.beginPath();
+ ctx.moveTo(p.l,p.t);
+ ctx.lineTo(p.l,h-p.b);
+ ctx.lineTo(w-p.r,h-p.b);
+ ctx.stroke();
+
+ ctx.fillStyle='#94a3b8';
+ ctx.font='10px sans-serif';
+ ctx.fillText('R1',p.l,h-7);
+ ctx.fillText('R'+series.length,w-p.r-24,h-7);
+ ctx.fillText(formatRaceTime(max),2,p.t+7);
+ ctx.fillText(formatRaceTime(min),2,h-p.b);
+
+ const colors={Soft:'#ef4444',Medium:'#facc15',Hard:'#cbd5e1'};
+ const xFor=i=>p.l+pw*(i/Math.max(1,series.length-1));
+ const yFor=v=>p.t+ph*(1-((v-min)/(max-min)));
+
+ let start=0;
+ while(start<series.length){
+   const tyre=series[start].tyre;
+   let end=start;
+   while(end+1<series.length && series[end+1].tyre===tyre)end++;
+
+   ctx.strokeStyle=colors[tyre]||'#ffffff';
+   ctx.lineWidth=2.5;
+   ctx.beginPath();
+   for(let i=start;i<=end;i++){
+     const x=xFor(i),y=yFor(series[i].time);
+     if(i===start)ctx.moveTo(x,y); else ctx.lineTo(x,y);
+   }
+   ctx.stroke();
+
+   ctx.fillStyle=colors[tyre]||'#ffffff';
+   for(let i=start;i<=end;i++){
+     const x=xFor(i),y=yFor(series[i].time);
+     ctx.beginPath();ctx.arc(x,y,2.2,0,Math.PI*2);ctx.fill();
+   }
+   start=end+1;
+ }
+
+
+}
+
+
+function paceLossAtStintEnd(t,laps){
+ const now=lapTimeAtStintLap(t,Math.max(1,laps));
+ return Math.max(0,now-t.fast);
+}
+function crossoverLap(currentTyre,nextTyre,maxLaps=60){
+ const fresh=lapTimeAtStintLap(nextTyre,1);
+ if(fresh==null)return null;
+ for(let l=1;l<=maxLaps;l++){
+  const cur=lapTimeAtStintLap(currentTyre,l);
+  if(cur!=null && cur>=fresh)return l;
+ }
+ return null;
+}
+
+function localStopCost(x,j,T,R,P,pitLap){
+ const prev=j===0?0:x.pits[j-1];
+ const nextStop=j===x.pits.length-1?R:x.pits[j+1];
+ const curTyre=T[x.seq[j]], nextTyre=T[x.seq[j+1]];
+ const curLen=pitLap-prev;
+ const nextLen=nextStop-pitLap;
+ if(curLen<1||nextLen<1)return Infinity;
+ if(wearAt(curTyre,curLen)>100||wearAt(nextTyre,nextLen)>100)return Infinity;
+ return stintTime(curTyre,curLen)+stintTime(nextTyre,nextLen)+P*1000;
+}
+function preciseStopAnalysis(x,j,T,R,P){
+ const opt=x.pits[j];
+ let bestLap=opt,bestCost=Infinity;
+ const candidates=[];
+ const lo=Math.max((j===0?1:x.pits[j-1]+1),opt-3);
+ const hi=Math.min((j===x.pits.length-1?R-1:x.pits[j+1]-1),opt+3);
+ for(let lap=lo;lap<=hi;lap++){
+  const cost=localStopCost(x,j,T,R,P,lap);
+  if(!isFinite(cost))continue;
+  candidates.push({lap,cost});
+  if(cost<bestCost){bestCost=cost;bestLap=lap;}
+ }
+ const early=candidates.filter(c=>c.lap<bestLap).slice(-2).map(c=>c.lap);
+ const late=candidates.filter(c=>c.lap>bestLap).slice(0,2).map(c=>c.lap);
+ return {bestLap,early,late,candidates};
+}
+function boxWindowHtml(a){
+ let h='<div class="boxwindow">';
+ a.early.forEach(l=>h+='<span class="boxpill boxearly">R'+l+' früh</span>');
+ h+='<span class="boxpill boxoptimal">R'+a.bestLap+' optimal</span>';
+ a.late.forEach(l=>h+='<span class="boxpill boxlate">R'+l+' spät</span>');
+ h+='</div>';
+ return h;
+}
+function calc(){
+ updateAllTyreTimes();
+ const R=Math.max(5,Math.round(N('race'))),L=100,P=N('pit');
+ const raceDuration=parseTime($('raceTime').value);
+ const T=[tyre('s'),tyre('m'),tyre('h')],lev=[80,100];
+
+ // Chart
+ const c=$('chart'),ctx=c.getContext('2d'),d=devicePixelRatio||1,w=c.clientWidth,h=430;
+ c.width=w*d;c.height=h*d;ctx.scale(d,d);
+ const p={l:46,r:16,t:16,b:46},pw=w-p.l-p.r,ph=h-p.t-p.b;
+ ctx.clearRect(0,0,w,h);ctx.font='12px system-ui';ctx.fillStyle='#94a3b8';ctx.strokeStyle='#26344d';
+ for(let y=0;y<=100;y+=20){let yy=p.t+ph*(1-y/100);ctx.beginPath();ctx.moveTo(p.l,yy);ctx.lineTo(w-p.r,yy);ctx.stroke();ctx.fillText(y+'%',6,yy+4)}
+ const maxLife=Math.max(...T.map(t=>roundAt(t,100)),R),xMax=Math.ceil(maxLife/5)*5;
+ window.chartState={T,xMax,p,w,h,pw,ph,canvas:c};
+ const selected=window.chartSelection;
+ let step=3;
+ for(let x=0;x<=xMax;x+=step){let xx=p.l+pw*x/xMax;ctx.beginPath();ctx.moveTo(xx,p.t);ctx.lineTo(xx,h-p.b);ctx.stroke();ctx.fillText(x,xx-5,h-p.b+18)}
+ for(const z of lev){let yy=p.t+ph*(1-z/100);ctx.setLineDash([5,5]);ctx.strokeStyle=z===100?'#94a3b8':z>=80?'#ef4444':'#f59e0b';ctx.beginPath();ctx.moveTo(p.l,yy);ctx.lineTo(w-p.r,yy);ctx.stroke();ctx.setLineDash([])}
+ const colors=['#ef4444','#facc15','#e5e7eb'];
+ T.forEach((t,i)=>{
+   ctx.strokeStyle=colors[i];ctx.lineWidth=3;ctx.beginPath();
+   for(let r=0;r<=xMax;r+=.25){let y=Math.min(100,wearAt(t,r)),xx=p.l+pw*r/xMax,yy=p.t+ph*(1-y/100);r?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy)}ctx.stroke();
+   lev.forEach(z=>{let rr=roundAt(t,z);if(rr>xMax)return;let xx=p.l+pw*rr/xMax,yy=p.t+ph*(1-z/100);ctx.fillStyle=colors[i];ctx.beginPath();ctx.arc(xx,yy,4,0,Math.PI*2);ctx.fill();})
+ });
+ if(selected && selected.lap<=xMax && T[selected.i]){
+   const t=T[selected.i], wear=Math.min(100,wearAt(t,selected.lap));
+   const xx=p.l+pw*selected.lap/xMax, yy=p.t+ph*(1-wear/100);
+   ctx.save();
+   ctx.fillStyle='#ffffff';
+   ctx.strokeStyle=colors[selected.i];
+   ctx.lineWidth=3;
+   ctx.beginPath();ctx.arc(xx,yy,7,0,Math.PI*2);ctx.fill();ctx.stroke();
+   ctx.restore();
+ }
+
+ let out=[];
+ let fallbackOut=[];
+
+ // 1 stop
+ for(let a=0;a<3;a++)for(let b=0;b<3;b++){
+   if(a===b)continue;
+   if(!enoughSets([a,b],T))continue;
+   for(let p1=1;p1<=R-1;p1++){
+     const l1=p1,l2=R-p1;
+     if(!validStint(T[a],l1,L)||!validStint(T[b],l2,L))continue;
+     const maxWear=Math.max(wearAt(T[a],l1),wearAt(T[b],l2));
+     const score=stintTime(T[a],l1) + stintTime(T[b],l2) + P*1000;
+     const endWears=[wearAt(T[a],l1),wearAt(T[b],l2)];
+     const candidate={seq:[a,b],stops:1,pits:[p1],total:score,maxWear,pref:wearPreference(endWears),endWears};
+     fallbackOut.push(candidate);
+     if(raceDuration==null || score<=raceDuration)out.push(candidate);
+   }
+ }
+
+ // 2 stop
+ for(let a=0;a<3;a++)for(let b=0;b<3;b++)for(let cidx=0;cidx<3;cidx++){
+   if(new Set([a,b,cidx]).size<2)continue;
+   if(!enoughSets([a,b,cidx],T))continue;
+   for(let p1=1;p1<=R-2;p1++){
+     for(let p2=p1+1;p2<=R-1;p2++){
+       const l1=p1,l2=p2-p1,l3=R-p2;
+       if(!validStint(T[a],l1,L)||!validStint(T[b],l2,L)||!validStint(T[cidx],l3,L))continue;
+       const maxWear=Math.max(wearAt(T[a],l1),wearAt(T[b],l2),wearAt(T[cidx],l3));
+       const score=stintTime(T[a],l1) + stintTime(T[b],l2) + stintTime(T[cidx],l3) + P*1000 + P*1000;
+       const endWears=[wearAt(T[a],l1),wearAt(T[b],l2),wearAt(T[cidx],l3)];
+       const candidate={seq:[a,b,cidx],stops:2,pits:[p1,p2],total:score,maxWear,pref:wearPreference(endWears),endWears};
+       fallbackOut.push(candidate);
+       if(raceDuration==null || score<=raceDuration)out.push(candidate);
+     }
+   }
+ }
+
+ // If the entered total race time is too aggressive, still show the best
+ // technically valid strategies instead of leaving the strategy area empty.
+ const targetMissed=(raceDuration!=null && out.length===0 && fallbackOut.length>0);
+ if(targetMissed)out=fallbackOut.slice();
+ out.sort(strategyCompare);
+
+ // Build distinct useful candidates.
+ const all=[];
+ for(const s of out){
+   const dupe=all.some(u=>u.stops===s.stops && u.seq.join('-')===s.seq.join('-') &&
+     u.pits.length===s.pits.length && u.pits.every((p,i)=>Math.abs(p-s.pits[i])<=1));
+   if(!dupe)all.push(s);
+ }
+
+ let picks=[];
+ if(all.length){
+   picks.push(all[0]); // fastest
+   const nextFast=all.find(x=>x!==picks[0]);
+   if(nextFast)picks.push(nextFast);
+
+   const safePool=all.filter(x=>!picks.includes(x));
+   safePool.sort((a,b)=>a.pref.tier-b.pref.tier || a.maxWear-b.maxWear || a.total-b.total);
+   if(safePool[0])picks.push(safePool[0]);
+ }
+ const cards=$('strategyCards');
+ const bestStrategy=picks[0]||null; cards.innerHTML='';
+ const existingWarn=document.querySelector('.targetwarn'); if(existingWarn)existingWarn.remove();
+ if(targetMissed){
+   const warn=document.createElement('div');
+   warn.className='targetwarn';
+   const fastest=fallbackOut.reduce((a,b)=>!a||b.total<a.total?b:a,null);
+   const gap=fastest&&raceDuration!=null?fastest.total-raceDuration:null;
+   warn.innerHTML='<b>Zielzeit derzeit nicht erreichbar.</b> Die besten gültigen Strategien werden trotzdem angezeigt.'+
+     (gap!=null&&gap>0?' Schnellste berechnete Variante liegt ca. <b>+'+formatRaceTime(gap)+'</b> über der Zielzeit.':'');
+   cards.before(warn);
+ }
+ const drawPaceCharts=()=>{
+   document.querySelectorAll('.paceMini').forEach(cv=>{
+     const idx=parseInt(cv.dataset.strategy,10);
+     const sx=picks[idx];
+     if(sx)drawPaceMini(cv,paceSeriesForStrategy(sx,T,R),sx,T,R);
+   });
+ };
+ requestAnimationFrame(()=>requestAnimationFrame(drawPaceCharts));
+ setTimeout(drawPaceCharts,80);
+ if(!picks.length){
+   cards.innerHTML='<div class="strat"><h3>⚠️ Keine sinnvolle Strategie</h3><div class="muted">Mit den aktuellen Verschleißwerten, dem gewählten Limit und den verfügbaren Reifensätzen ist keine gültige 1- oder 2-Stopp-Strategie möglich. Prüfe insbesondere, ob mindestens zwei verschiedene Reifenmischungen verfügbar sind.</div></div>';
+ } else {
+   picks.forEach((x,i)=>{
+     const div=document.createElement('div'); div.className='strat';
+     let body='<h3>'+strategyLabel(i)+'</h3>';
+
+     // Compact visual race timeline.
+     body+='<div class="timeline">';
+     for(let j=0;j<x.seq.length;j++){
+       const startLap=j===0?1:x.pits[j-1]+1;
+       const endLap=j<x.pits.length?x.pits[j]:R;
+       const stintLaps=(j===0?x.pits[0]:(j<x.pits.length?x.pits[j]-x.pits[j-1]:R-x.pits[x.pits.length-1]));
+       const tyre=T[x.seq[j]];
+       const cls=tyre.name.toLowerCase();
+       const label=(tyre.name==='Soft'?'S':tyre.name==='Medium'?'M':'H')+' '+startLap+'–'+endLap;
+       body+='<div class="seg '+cls+'" style="width:'+(stintLaps/R*100)+'%">'+label+'</div>';
+     }
+     body+='</div>';
+
+     for(let j=0;j<x.seq.length;j++){
+       const startLap=j===0?1:x.pits[j-1]+1;
+       const endLap=j<x.pits.length?x.pits[j]:R;
+       const stintLaps=(j===0?x.pits[0]:(j<x.pits.length?x.pits[j]-x.pits[j-1]:R-x.pits[x.pits.length-1]));
+       const tyre=T[x.seq[j]];
+       body+='<div class="stint"><b>'+tyre.name+'</b> · R'+startLap+'–'+endLap+'<br><span class="muted">'+stintLaps+' Runden · '+wearAt(tyre,stintLaps).toFixed(1)+' % Verschleiß</span></div>';
+
+       if(j<x.pits.length){
+         const ana=preciseStopAnalysis(x,j,T,R,P);
+         const nextTyre=T[x.seq[j+1]];
+         const cross=crossoverLap(tyre,nextTyre,Math.max(20,stintLaps+10));
+         const loss=paceLossAtStintEnd(tyre,stintLaps);
+         body+='<div class="stopmeta">Pace-Verlust am Stintende: <b>+'+(loss/1000).toFixed(3).replace('.',',')+' s/Runde</b>';
+         if(cross!=null)body+='<br>Crossover zu frischem '+nextTyre.name+': <b>ab Stint-Runde '+cross+'</b>';
+         body+='</div>';
+       }
+     }
+     body+='<div class="stratdelta">'+strategyDeltaText(x,bestStrategy)+'</div>';
+     const hint=tacticalHint(x,T,R,P);
+     if(hint)body+='<div class="tactic">'+hint+'</div>';
+     body+='<div class="pacechart"><div class="pacetitle">Pace-Verlauf</div><canvas class="paceMini" data-strategy="'+i+'"></canvas></div>';
+     body+='<div class="muted">'+x.stops+' Stopp'+(x.stops>1?'s':'')+' · Max. Verschleiß '+x.maxWear.toFixed(1)+' %</div>';
+     div.innerHTML=body; cards.appendChild(div);
+   });
+ }
+}
+
+
+const tyreCanvas=$('chart');
+const chartTip=$('chartTip');
+
+function hideChartTip(){
+  chartTip.style.display='none';
+}
+
+function showChartTipFromEvent(e){
+  const s=window.chartState;
+  if(!s)return;
+
+  const rect=tyreCanvas.getBoundingClientRect();
+  if(!rect.width || !rect.height)return;
+
+  // Canvas is drawn in CSS/logical pixels because ctx.scale(devicePixelRatio).
+  // Therefore pointer coordinates must stay in CSS pixels too.
+  const x=e.clientX-rect.left;
+  const y=e.clientY-rect.top;
+
+  if(x<s.p.l || x>s.w-s.p.r || y<s.p.t || y>s.h-s.p.b){
+    hideChartTip();
+    return;
+  }
+
+  const exactLap=(x-s.p.l)/s.pw*s.xMax;
+  const lap=Math.max(0,Math.min(s.xMax,Math.round(exactLap)));
+
+  let best=null;
+  s.T.forEach((t,i)=>{
+    const wear=Math.min(100,wearAt(t,lap));
+    const yy=s.p.t+s.ph*(1-wear/100);
+    const dist=Math.abs(y-yy);
+    if(!best || dist<best.dist){
+      best={t,i,wear,dist,yy};
+    }
+  });
+
+  // Generous hit area for touch use.
+  const tolerance=28;
+  if(!best || best.dist>tolerance){
+    hideChartTip();
+    return;
+  }
+
+  window.chartSelection={i:best.i,lap:lap};
+  calc();
+
+  chartTip.innerHTML=
+    '<b>'+best.t.name+'</b><br>'+
+    'Runde: '+lap+'<br>'+
+    'Abnutzung: '+best.wear.toFixed(1)+' %';
+
+  chartTip.style.display='block';
+
+  // Position popup within chart wrapper.
+  const wrap=tyreCanvas.parentElement;
+  const wrapRect=wrap.getBoundingClientRect();
+  const localX=e.clientX-wrapRect.left;
+  const localY=e.clientY-wrapRect.top;
+
+  requestAnimationFrame(()=>{
+    const tipW=chartTip.offsetWidth || 150;
+    const tipH=chartTip.offsetHeight || 70;
+    let left=localX+12;
+    let top=localY-tipH-10;
+
+    if(left+tipW>wrapRect.width-6) left=localX-tipW-12;
+    if(left<6) left=6;
+    if(top<6) top=localY+12;
+    if(top+tipH>wrapRect.height-6) top=wrapRect.height-tipH-6;
+
+    chartTip.style.left=left+'px';
+    chartTip.style.top=top+'px';
+  });
+}
+
+tyreCanvas.addEventListener('click',showChartTipFromEvent);
+tyreCanvas.addEventListener('pointerup',e=>{
+  if(e.pointerType!=='mouse') showChartTipFromEvent(e);
+});
+
+loadInputs();
+updateAllTyreTimes();
+calc();
+onresize=()=>{hideChartTip();calc();};
+
+</script>
+</body></html>
+<style>
+.pacechart .paceMini{height:142px!important;min-height:142px!important}
+.stopmeta{margin:7px 0;padding:8px 10px;border-radius:10px;background:#0f172a;border:1px solid #263449;font-size:12px;line-height:1.45}
+.boxwindow{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.boxpill{padding:5px 8px;border-radius:999px;font-size:11px;border:1px solid #334155}
+.boxearly{background:#172033}
+.boxoptimal{background:#24321d;font-weight:700}
+.boxlate{background:#321d1d}
+
+
+
+
+
+
+
+@media(max-width:640px){}
+
+
+</style>
