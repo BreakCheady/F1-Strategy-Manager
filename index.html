@@ -21,6 +21,29 @@ body{
 }
 .wrap{max-width:1500px;margin:auto}
 .apphead{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:2px 8px 16px;border-bottom:1px solid rgba(148,163,184,.22);margin-bottom:14px}
+.apphead-logo{padding-top:8px}
+.brand-logo{min-width:0;flex:1}
+.header-logo{
+ width:112px;height:112px;object-fit:contain;display:block;flex:0 0 auto;
+ filter:drop-shadow(0 8px 18px rgba(0,0,0,.38));
+}
+.brand-copy{min-width:0}
+.brand-copy .tagline{font-size:14px;font-weight:750;color:#d3deec}
+.brand-copy .track-subtitle{margin-top:7px}
+@media(max-width:700px){
+ .apphead-logo{align-items:flex-start;gap:10px}
+ .header-logo{width:84px;height:84px}
+ .brand-logo{align-items:center}
+ .brand-copy .tagline{font-size:12px;line-height:1.35}
+ .savepill{font-size:10px;padding:6px 9px}
+}
+@media(max-width:480px){
+ .apphead-logo{flex-wrap:wrap}
+ .brand-logo{width:100%}
+ .header-logo{width:76px;height:76px}
+ .savepill{margin-left:88px}
+}
+
 .brand{display:flex;align-items:center;gap:12px}
 .f1mark{font-weight:950;font-style:italic;font-size:25px;color:#ff2638;letter-spacing:-2px}
 h1{font-size:25px;margin:0;font-style:italic;letter-spacing:.2px}
@@ -120,6 +143,67 @@ table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}td,th{p
 .dropboxactions button{margin-top:0}
 @media(max-width:700px){.dropboxactions{grid-template-columns:1fr}.dropboxhead{align-items:flex-start;flex-direction:column}}
 
+
+
+
+
+.setupgrid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.85fr);gap:14px;align-items:start}
+.setupfields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.setupgroup{padding:10px;border:1px solid #24374d;border-radius:10px;background:#08131f}
+.setupgroup h3{margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.45px;color:#cbd5e1}
+.setupfeedback{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:10px}
+.setupresult{background:#08131f;border:1px solid #2b3d53;border-radius:11px;padding:13px}
+.setuprec{padding:10px;border:1px solid #24374d;border-radius:10px;background:#091522;margin-top:8px}
+.setuprec strong{display:block;margin-bottom:3px}
+.setupconfidence{display:inline-flex;padding:3px 8px;border:1px solid #3a4e68;border-radius:999px;font-size:10px;font-weight:900;margin-left:6px}
+.setupconfidence.high{color:#86efac;border-color:rgba(57,217,138,.45)}
+.setupconfidence.medium{color:#facc15;border-color:rgba(250,204,21,.4)}
+.setupconfidence.test{color:#93c5fd;border-color:rgba(59,130,246,.45)}
+.setupsummary{margin-top:9px;padding:9px 10px;border-radius:9px;background:#0a1724;border:1px solid #20344a;font-size:11px;line-height:1.5}
+@media(max-width:1000px){.setupgrid{grid-template-columns:1fr}.setupfields{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.setupfields,.setupfeedback{grid-template-columns:1fr}}
+
+.postgrid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.9fr);gap:14px;align-items:start}
+.postinputs{display:grid;gap:10px}
+.posttop{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.poststints{display:grid;gap:8px}
+
+.postuse{display:flex;align-items:center;gap:7px;margin-bottom:7px;font-size:11px;font-weight:900;color:#cbd5e1}
+.postuse input{width:auto!important;margin:0}
+.poststint.inactive{opacity:.42}
+.poststint.inactive input:not([type=checkbox]),.poststint.inactive select{pointer-events:none}
+
+.poststint{display:grid;grid-template-columns:1.15fr .8fr .85fr 1fr;gap:8px;padding:10px;border:1px solid #24374d;border-radius:10px;background:#08131f}
+.postresult{background:#08131f;border:1px solid #2b3d53;border-radius:11px;padding:13px}
+.postscore{display:flex;align-items:flex-end;gap:9px;flex-wrap:wrap}
+.postscore .big{font-size:34px;line-height:1;font-weight:950}
+.postmetrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:11px 0}
+.postmetric{padding:9px;border:1px solid #20344a;border-radius:9px;background:#0a1724}
+.postmetric .v{font-size:15px;font-weight:900;margin-top:2px}
+.postactions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.postlearn{margin-top:10px;padding:10px;border:1px solid #24374d;border-radius:10px;background:#091522}
+.postlearnrow{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid rgba(82,105,132,.2)}
+.postlearnrow:last-child{border-bottom:0}
+.posthistory{margin-top:9px;font-size:11px;color:#94a3b8;line-height:1.5}
+.posthint{font-size:11px;color:#94a3b8;line-height:1.45;margin-top:7px}
+@media(max-width:900px){.postgrid{grid-template-columns:1fr}.poststint{grid-template-columns:1fr 1fr}.posttop{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.poststint,.posttop,.postmetrics{grid-template-columns:1fr}.postlearnrow{grid-template-columns:1fr}}
+
+.scgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:14px;align-items:start}
+.sccontrols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.scresult{background:#08131f;border:1px solid #2b3d53;border-radius:11px;padding:13px}
+.schead{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:8px}
+.screco{font-size:22px;font-weight:950;letter-spacing:.25px}
+.scbadge{display:inline-flex;align-items:center;border:1px solid #3a4e68;border-radius:999px;padding:4px 9px;font-size:10px;font-weight:900;letter-spacing:.25px}
+.scbadge.pit{color:#86efac;border-color:rgba(57,217,138,.45);background:rgba(57,217,138,.08)}
+.scbadge.stay{color:#facc15;border-color:rgba(250,204,21,.4);background:rgba(250,204,21,.08)}
+.scmetrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0}
+.scmetric{background:#0a1724;border:1px solid #21364c;border-radius:9px;padding:9px}
+.scmetric .v{font-size:15px;font-weight:900;margin-top:2px}
+.scplan{margin-top:9px;padding:9px 10px;border-radius:9px;background:#091522;border:1px solid #1f3145;font-size:12px;line-height:1.55}
+.scnote{margin-top:8px;color:#94a3b8;font-size:11px;line-height:1.45}
+@media(max-width:900px){.scgrid{grid-template-columns:1fr}.sccontrols{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.sccontrols{grid-template-columns:1fr}.scmetrics{grid-template-columns:1fr}}
 
 .labgrid{display:grid;grid-template-columns:1.05fr .95fr;gap:12px}
 .labcontrols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
@@ -224,11 +308,17 @@ table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}td,th{p
 }
 
 </style>
+<link rel="icon" type="image/png" href="favicon.png">
 </head>
 <body class="chartclean"><div class="wrap">
-<div class="apphead">
-  <div class="brand"><div class="f1mark">F1</div><h1>Strategy Manager</h1></div>
-  <div class="tagline">Rennstrategie-Analyse · Schnell. Klar. Fundiert.</div>
+<div class="apphead apphead-logo">
+  <div class="brand brand-logo">
+    <img class="header-logo" src="f1-strategy-manager-logo.png" alt="F1 Strategy Manager">
+    <div class="brand-copy">
+      <div class="tagline">Rennstrategie-Analyse · Schnell. Klar. Fundiert.</div>
+      <div class="track-subtitle" id="trackSubtitle">Race Strategy</div>
+    </div>
+  </div>
   <div class="savepill">✓ Autospeichern aktiv</div>
 </div>
 
@@ -318,7 +408,7 @@ table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}td,th{p
 <div class="timeres">
   Gemessene/abgeleitete Ø-Rundenzeit: <b id="savg">–</b><br>
   Abgeleitete 10-Runden-Stintzeit: <b id="sstint10">–</b>
-</div><label>Verfügbare Sätze</label><div class="setctl"><button type="button" class="setbtn" data-target="ss" data-delta="-1">−</button><input id="ss" type="number" value="2" min="0" step="1" readonly><button type="button" class="setbtn" data-target="ss" data-delta="1">+</button></div>
+</div><label>Verfügbare Sätze</label><div class="setctl"><button type="button" class="setbtn" data-target="ss" data-delta="-1" onclick="chgSet('ss',-1)">−</button><input id="ss" type="number" value="2" min="0" step="1" readonly><button type="button" class="setbtn" data-target="ss" data-delta="1" onclick="chgSet('ss',1)">+</button></div>
 
 
 </div>
@@ -334,7 +424,7 @@ table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}td,th{p
 <div class="timeres">
   Gemessene/abgeleitete Ø-Rundenzeit: <b id="mavg">–</b><br>
   Abgeleitete 10-Runden-Stintzeit: <b id="mstint10">–</b>
-</div><label>Verfügbare Sätze</label><div class="setctl"><button type="button" class="setbtn" data-target="ms" data-delta="-1">−</button><input id="ms" type="number" value="2" min="0" step="1" readonly><button type="button" class="setbtn" data-target="ms" data-delta="1">+</button></div>
+</div><label>Verfügbare Sätze</label><div class="setctl"><button type="button" class="setbtn" data-target="ms" data-delta="-1" onclick="chgSet('ms',-1)">−</button><input id="ms" type="number" value="2" min="0" step="1" readonly><button type="button" class="setbtn" data-target="ms" data-delta="1" onclick="chgSet('ms',1)">+</button></div>
 
 
 </div>
@@ -350,7 +440,7 @@ table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}td,th{p
 <div class="timeres">
   Gemessene/abgeleitete Ø-Rundenzeit: <b id="havg">–</b><br>
   Abgeleitete 10-Runden-Stintzeit: <b id="hstint10">–</b>
-</div><label>Verfügbare Sätze</label><div class="setctl"><button type="button" class="setbtn" data-target="hs" data-delta="-1">−</button><input id="hs" type="number" value="2" min="0" step="1" readonly><button type="button" class="setbtn" data-target="hs" data-delta="1">+</button></div>
+</div><label>Verfügbare Sätze</label><div class="setctl"><button type="button" class="setbtn" data-target="hs" data-delta="-1" onclick="chgSet('hs',-1)">−</button><input id="hs" type="number" value="2" min="0" step="1" readonly><button type="button" class="setbtn" data-target="hs" data-delta="1" onclick="chgSet('hs',1)">+</button></div>
 
 
 </div>
@@ -388,11 +478,169 @@ table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}td,th{p
 
 
 <div id="strategyCards" class="strats strategy-details-hidden"></div>
-<p class="small">A = schnellste sinnvolle Strategie, B = nächstschnelle Alternative, C = reifenschonendere Alternative. Die Strategie berücksichtigt Reifenverschleiß, progressiven Pace-Abbau, Boxenstopp-Verlust und die verfügbaren Reifensätze.</p>
+<p class="small">A = empfohlene Strategie aus Pace und Reifenabnutzung, B = Alternative, C = reifenschonendere Alternative. Die Strategie berücksichtigt Reifenverschleiß, progressiven Pace-Abbau, Boxenstopp-Verlust und die verfügbaren Reifensätze.</p>
 </div>
 
 
 
+
+
+
+
+<div class="card" id="setupEngineerCard">
+  <div class="section-toggle" id="setupToggle" onclick="toggleCollapsible('setupToggle','setupBody')">
+    <h2 style="margin:0;flex:1">Setup Engineer</h2><span class="chev">⌄</span>
+  </div>
+  <div class="collapsible-body" id="setupBody">
+    <div class="small" style="margin-bottom:10px">Speichert das gefahrene F1-26-Setup zusammen mit dem Race-Debrief. Die App vergleicht Setup-Änderungen mit deinen Ergebnissen und schlägt nur kleine, datenbasierte Testschritte vor. Ohne ausreichende Daten werden Empfehlungen ausdrücklich als Testvorschlag markiert.</div>
+    <div class="setupgrid">
+      <div>
+        <div class="setupfields">
+          <div class="setupgroup"><h3>Aerodynamik</h3>
+            <label>Frontflügel</label><input id="setupFrontWing" type="number" step="1" value="25">
+            <label>Heckflügel</label><input id="setupRearWing" type="number" step="1" value="25">
+          </div>
+          <div class="setupgroup"><h3>Differential</h3>
+            <label>On-Throttle %</label><input id="setupDiffOn" type="number" step="1" value="55">
+            <label>Off-Throttle %</label><input id="setupDiffOff" type="number" step="1" value="50">
+          </div>
+          <div class="setupgroup"><h3>Geometrie</h3>
+            <label>Front Camber</label><input id="setupCamberF" type="number" step="0.01" value="-3.50">
+            <label>Rear Camber</label><input id="setupCamberR" type="number" step="0.01" value="-2.00">
+            <label>Front Toe</label><input id="setupToeF" type="number" step="0.01" value="0.00">
+            <label>Rear Toe</label><input id="setupToeR" type="number" step="0.01" value="0.10">
+          </div>
+          <div class="setupgroup"><h3>Fahrwerk</h3>
+            <label>Front Suspension</label><input id="setupSuspF" type="number" step="1" value="20">
+            <label>Rear Suspension</label><input id="setupSuspR" type="number" step="1" value="15">
+            <label>Front ARB</label><input id="setupArbF" type="number" step="1" value="10">
+            <label>Rear ARB</label><input id="setupArbR" type="number" step="1" value="8">
+          </div>
+          <div class="setupgroup"><h3>Bodenfreiheit</h3>
+            <label>Front Ride Height</label><input id="setupRideF" type="number" step="1" value="20">
+            <label>Rear Ride Height</label><input id="setupRideR" type="number" step="1" value="45">
+          </div>
+          <div class="setupgroup"><h3>Bremsen</h3>
+            <label>Brake Pressure %</label><input id="setupBrakePressure" type="number" step="1" value="100">
+            <label>Front Brake Bias %</label><input id="setupBrakeBias" type="number" step="1" value="55">
+          </div>
+          <div class="setupgroup"><h3>Reifendruck</h3>
+            <label>Front Left</label><input id="setupPressureFL" type="number" step="0.1" value="25.0">
+            <label>Front Right</label><input id="setupPressureFR" type="number" step="0.1" value="25.0">
+            <label>Rear Left</label><input id="setupPressureRL" type="number" step="0.1" value="22.0">
+            <label>Rear Right</label><input id="setupPressureRR" type="number" step="0.1" value="22.0">
+          </div>
+        </div>
+        <div class="setupfeedback">
+          <div><label>Fahrgefühl / Hauptproblem</label><select id="setupFeedback">
+            <option value="">– kein Feedback –</option>
+            <option value="understeer">Untersteuern</option>
+            <option value="oversteer">Übersteuern</option>
+            <option value="traction">Traktionsprobleme</option>
+            <option value="straight">Zu wenig Topspeed</option>
+            <option value="tyres">Reifen überhitzen / hoher Verschleiß</option>
+            <option value="stable">Setup fühlt sich stabil an</option>
+          </select></div>
+          <div><label>Setup-Notiz</label><input id="setupNote" type="text" placeholder="z. B. nervös in schnellen Kurven"></div>
+        </div>
+      </div>
+      <div class="setupresult">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><b>Setup-Empfehlung</b><span id="setupEvidence" class="setupconfidence test">TESTVORSCHLAG</span></div>
+        <div id="setupRecommendations" class="small" style="margin-top:8px">Noch nicht genügend Setup-Daten vorhanden.</div>
+        <div class="setupsummary" id="setupLearningSummary">Setup Learning: noch keine gespeicherten Vergleichsdaten.</div>
+        <div class="postactions"><button type="button" id="setupAnalyzeBtn">SETUP ANALYSIEREN</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card" id="postRaceCard">
+  <div class="section-toggle" id="postToggle" onclick="toggleCollapsible('postToggle','postBody')">
+    <h2 style="margin:0;flex:1">Post-Race Debrief</h2><span class="chev">⌄</span>
+  </div>
+  <div class="collapsible-body" id="postBody">
+    <div class="small" style="margin-bottom:10px">Plan gegen Realität vergleichen, Stints bewerten und reale Renndaten in das Reifenmodell zurückspielen. Gelernte Werte wirken anschließend automatisch auf Strategie A/B/C, Strategie-Labor und Safety-Car-Rechner. Zusätzlich werden Erkenntnisse aller Strecken zu einem vorsichtigen globalen Startmodell für neue Strecken zusammengeführt.</div>
+    <div class="postgrid">
+      <div class="postinputs">
+        <div class="posttop">
+          <div><label>Tatsächliche Rennzeit</label><input id="postRaceTime" type="text" placeholder="z. B. 43:12,500"></div>
+          <div><label>Gelernte Daten verwenden</label><select id="postLearningEnabled"><option value="1" selected>Ja · in Strategien berücksichtigen</option><option value="0">Nein · nur analysieren</option></select></div>
+        </div>
+        <div class="poststints">
+          <div class="poststint" id="postStintWrap1">
+            <div><label class="postuse"><input id="postUse1" type="checkbox" checked> Stint berücksichtigen</label><label>Stint 1 · Reifen</label><select id="postTyre1"><option value="s">🔴 Soft</option><option value="m">🟡 Medium</option><option value="h">⚪ Hard</option></select></div>
+            <div><label>Ende Runde</label><input id="postEnd1" type="number" min="1" step="1"></div>
+            <div><label>Endverschleiß %</label><input id="postWear1" type="number" min="0" max="100" step="0.1"></div>
+            <div><label>Ø Rundenzeit</label><input id="postPace1" type="text" placeholder="1:24,300"></div>
+          </div>
+          <div class="poststint" id="postStintWrap2">
+            <div><label class="postuse"><input id="postUse2" type="checkbox" checked> Stint berücksichtigen</label><label>Stint 2 · Reifen</label><select id="postTyre2"><option value="s">🔴 Soft</option><option value="m" selected>🟡 Medium</option><option value="h">⚪ Hard</option></select></div>
+            <div><label>Ende Runde</label><input id="postEnd2" type="number" min="2" step="1"></div>
+            <div><label>Endverschleiß %</label><input id="postWear2" type="number" min="0" max="100" step="0.1"></div>
+            <div><label>Ø Rundenzeit</label><input id="postPace2" type="text" placeholder="1:24,800"></div>
+          </div>
+          <div class="poststint" id="postStintWrap3">
+            <div><label class="postuse"><input id="postUse3" type="checkbox"> Stint berücksichtigen</label><label>Stint 3 · Reifen</label><select id="postTyre3"><option value="s">🔴 Soft</option><option value="m">🟡 Medium</option><option value="h" selected>⚪ Hard</option></select></div>
+            <div><label>Ende Runde</label><input id="postEnd3" type="number" min="3" step="1"></div>
+            <div><label>Endverschleiß %</label><input id="postWear3" type="number" min="0" max="100" step="0.1"></div>
+            <div><label>Ø Rundenzeit</label><input id="postPace3" type="text" placeholder="optional"></div>
+          </div>
+        </div>
+        <div class="postactions">
+          <button type="button" id="postUsePlan">STRATEGIE A ÜBERNEHMEN</button>
+          <button type="button" id="postAnalyze">DEBRIEF BERECHNEN</button>
+          <button type="button" id="postSaveLearn">RACE SPEICHERN & LERNEN</button>
+        </div>
+        <div class="posthint">Nur angehakte Stints werden analysiert und gelernt. Für das Lernen reichen bereits Endverschleiß-Werte. Mit zusätzlicher Ø Rundenzeit lernt die App auch, ob ein Compound real schneller oder langsamer war als vorhergesagt. Die Anpassungen werden bewusst begrenzt, damit einzelne Ausreißer das Modell nicht verzerren.</div>
+      </div>
+      <div class="postresult">
+        <div class="postscore"><div class="big" id="postScore">–</div><div><b>Race Score</b><div class="small" id="postVerdict">Noch kein Debrief berechnet.</div></div></div>
+        <div class="postmetrics">
+          <div class="postmetric"><div class="small">Strategieverlust</div><div class="v" id="postStrategyLoss">–</div></div>
+          <div class="postmetric"><div class="small">Tyre Management</div><div class="v" id="postTyreScore">–</div></div>
+          <div class="postmetric"><div class="small">Model Accuracy</div><div class="v" id="postModelScore">–</div></div>
+        </div>
+        <div class="scplan" id="postFindings">Noch keine Analyse.</div>
+        <div class="postlearn">
+          <div style="display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap"><b>Gelerntes Reifenmodell</b><button type="button" id="postResetLearning">LERNMODELL ZURÜCKSETZEN</button></div>
+          <div id="postLearningSummary" class="small" style="margin-top:7px">Noch keine Renndaten gelernt.</div>
+          <div id="postGlobalLearningSummary" class="small" style="margin-top:9px;padding-top:9px;border-top:1px solid rgba(82,105,132,.25)">Globales Lernmodell wird aufgebaut …</div>
+        </div>
+        <div class="posthistory" id="postHistory">Noch keine Rennen für dieses Streckenprofil gespeichert.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card" id="scCalculatorCard">
+  <div class="section-toggle" id="scToggle" onclick="toggleCollapsible('scToggle','scBody')">
+    <h2 style="margin:0;flex:1">Safety-Car-Rechner</h2><span class="chev">⌄</span>
+  </div>
+  <div class="collapsible-body" id="scBody">
+    <div class="small" style="margin-bottom:10px">Gib die Runde an, in der das Safety Car kommt. Der Rechner vergleicht sofortigen Boxenstopp mit Weiterfahren auf Basis deiner Reifendaten und der gewählten Strategie.</div>
+    <div class="scgrid">
+      <div>
+        <div class="sccontrols">
+          <div><label>SC in Runde</label><input id="scLap" type="number" min="1" step="1" value="15"></div>
+          <div><label>Ausgangsstrategie</label><select id="scBase"><option value="0">Strategie A</option><option value="1">Strategie B</option><option value="2">Strategie C</option></select></div>
+          <div><label>Boxenverlust unter SC</label><input id="scPitLoss" type="number" min="0" step="0.1" value="12.0"></div>
+          <div><label>Max. weitere Stopps</label><select id="scMaxStops"><option value="0">0</option><option value="1" selected>1</option><option value="2">2</option></select></div>
+        </div>
+        <div class="scnote">Der SC-Boxenverlust ist separat einstellbar, weil er je nach Strecke und Position des Feldes deutlich vom normalen Boxenverlust abweichen kann.</div>
+      </div>
+      <div class="scresult">
+        <div class="schead"><span id="scBadge" class="scbadge">SC</span><div id="scHeadline" class="screco">–</div></div>
+        <div id="scReason" class="small">Noch keine gültige Strategie verfügbar.</div>
+        <div class="scmetrics">
+          <div class="scmetric"><div class="small">Aktueller Reifen</div><div class="v" id="scCurrentTyre">–</div></div>
+          <div class="scmetric"><div class="small">Reifenalter</div><div class="v" id="scTyreAge">–</div></div>
+          <div class="scmetric"><div class="small">Vorteil</div><div class="v" id="scAdvantage">–</div></div>
+        </div>
+        <div class="scplan" id="scPlan">–</div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="card" id="strategyLabCard">
 <div class="section-toggle" id="labToggle" onclick="toggleCollapsible('labToggle','labBody')"><h2 style="margin:0;flex:1">Strategie-Labor</h2><span class="chev">⌄</span></div><div class="collapsible-body" id="labBody">
@@ -418,7 +666,7 @@ table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}td,th{p
 </div>
 
 <div class="card" style="padding:10px 14px;text-align:center">
-  <div class="small" style="font-weight:800;letter-spacing:.45px">F1 STRATEGY MANAGER · VERSION 1.67 (BETA)</div>
+  <div class="small" style="font-weight:800;letter-spacing:.45px">F1 STRATEGY MANAGER · VERSION 1.77 (BETA)</div><div class="small" style="margin-top:4px">Made by BreakCheady</div>
 </div>
 
 </div>
@@ -458,7 +706,7 @@ function renderStrategyStatus(){
    start=end+1;
  });
  const compounds=new Set(x.seq).size;
- const enough=(typeof enoughSets==='function')?enoughSets(x.seq):true;
+ const enough=(typeof enoughSets==='function')?enoughSets(x.seq,[tyre('s'),tyre('m'),tyre('h')]):true;
  el.innerHTML=
   '<span class="statuschip ok">✓ '+x.stops+'-STOPP</span>'+
   '<span class="statuschip '+(enough?'ok':'')+'">'+(enough?'✓':'!')+' REIFENSÄTZE</span>'+
@@ -471,7 +719,7 @@ function tyreDisplayName(name){return name==='Soft'?'🔴 Soft':name==='Medium'?
 const $=id=>document.getElementById(id),N=id=>parseFloat($(id).value)||0;
 
 const SAVE_KEY='f1_strategy_engineer';
-const SAVE_IDS=['race','raceTime','pit','sw','mw','hw','sr1','sr5','sr10','mr1','mr5','mr10','hr1','hr5','hr10','ss','ms','hs'];
+const SAVE_IDS=['race','raceTime','pit','sw','mw','hw','sr1','sr5','sr10','mr1','mr5','mr10','hr1','hr5','hr10','ss','ms','hs','setupFrontWing','setupRearWing','setupDiffOn','setupDiffOff','setupCamberF','setupCamberR','setupToeF','setupToeR','setupSuspF','setupSuspR','setupArbF','setupArbR','setupRideF','setupRideR','setupBrakePressure','setupBrakeBias','setupPressureFL','setupPressureFR','setupPressureRL','setupPressureRR'];
 const PROFILE_KEY='f1_strategy_profiles_v1';
 const PROFILE_TOMBSTONE_KEY='f1_strategy_profile_tombstones_v1';
 const DROPBOX_CFG_KEY='f1_strategy_dropbox_cfg_v1';
@@ -668,15 +916,19 @@ async function syncDropbox(){
   setProfiles(merged.profiles);setProfileTombstones(merged.tombstones);cleanupOldTombstones();
   const hm=mergeHistoryState(getProfileHistory(),getDeletedHistory(),(remote&&remote.history)||{},(remote&&remote.historyDeleted)||{});
   setProfileHistory(hm.history);setDeletedHistory(hm.deleted);
-  refreshProfileSelect($('profileSelect').value);renderHistory();
+  setPostRaceData(mergePostRaceData(getPostRaceData(),(remote&&remote.postRace)||{}));
+  setLearningData(mergeLearningData(getLearningData(),(remote&&remote.learning)||{}));
+  refreshProfileSelect($('profileSelect').value);renderHistory();renderPostHistory();renderLearningSummary();
   const payload={
    app:'F1 Strategy Manager',
-   schemaVersion:3,
+   schemaVersion:6,
    syncedAt:new Date().toISOString(),
    profiles:getProfiles(),
    tombstones:getProfileTombstones(),
    history:getProfileHistory(),
-   historyDeleted:getDeletedHistory()
+   historyDeleted:getDeletedHistory(),
+   postRace:getPostRaceData(),
+   learning:getLearningData()
   };
   await dropboxUploadProfiles(token,payload);
   const cfg=getDropboxCfg();cfg.lastSync=new Date().toISOString();setDropboxCfg(cfg);
@@ -744,14 +996,14 @@ function saveCurrentProfile(){
  const p=getProfiles(),exists=!!p[name];
  if(exists&&!confirm('Das Profil „'+name+'“ existiert bereits. Wirklich aktualisieren?'))return;
  p[name]=profilePayload();clearProfileTombstone(name);setProfiles(p);refreshProfileSelect(name);
- setProfileStatus('Profil „'+name+'“ wurde '+(exists?'aktualisiert':'gespeichert')+'.','ok');renderHistory();autoSyncDropbox();
+ setProfileStatus('Profil „'+name+'“ wurde '+(exists?'aktualisiert':'gespeichert')+'.','ok');renderHistory();renderSetupLearningSummary();analyzeSetup();autoSyncDropbox();
 }
 function loadSelectedProfile(){
  const name=$('profileSelect').value;if(!name){setProfileStatus('Bitte ein Profil auswählen.','warn');return}
  const p=getProfiles()[name];if(!p){setProfileStatus('Profil nicht gefunden.','warn');refreshProfileSelect();return}
  $('profileName').value=name;applyProfile(p);
  const when=p.updatedAt?new Date(p.updatedAt).toLocaleString('de-DE'):'unbekannt';
- setProfileStatus('Profil „'+name+'“ geladen · zuletzt geändert '+when+'.','ok');renderHistory();
+ setProfileStatus('Profil „'+name+'“ geladen · zuletzt geändert '+when+'.','ok');renderHistory();renderSetupLearningSummary();analyzeSetup();
 }
 function deleteSelectedProfile(){
  const name=$('profileSelect').value;if(!name){setProfileStatus('Bitte ein Profil auswählen.','warn');return}
@@ -762,7 +1014,7 @@ function deleteSelectedProfile(){
 }
 function exportProfiles(){
  const p=getProfiles();
- const payload={app:'F1 Strategy Manager',schemaVersion:3,exportedAt:new Date().toISOString(),profiles:p,tombstones:getProfileTombstones(),history:getProfileHistory(),historyDeleted:getDeletedHistory()};
+ const payload={app:'F1 Strategy Manager',schemaVersion:6,exportedAt:new Date().toISOString(),profiles:p,tombstones:getProfileTombstones(),history:getProfileHistory(),historyDeleted:getDeletedHistory(),postRace:getPostRaceData(),learning:getLearningData()};
  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
  const url=URL.createObjectURL(blob),a=document.createElement('a');
  a.href=url;a.download='f1-strategy-profiles-'+new Date().toISOString().slice(0,10)+'.json';
@@ -779,6 +1031,8 @@ function importProfilesFromFile(file){
    const incomingTombstones=parsed&&parsed.tombstones&&typeof parsed.tombstones==='object'?parsed.tombstones:{};
    const hm=mergeHistoryState(getProfileHistory(),getDeletedHistory(),parsed.history||{},parsed.historyDeleted||{});
    setProfileHistory(hm.history);setDeletedHistory(hm.deleted);
+   setPostRaceData(mergePostRaceData(getPostRaceData(),parsed.postRace||{}));
+   setLearningData(mergeLearningData(getLearningData(),parsed.learning||{}));
 
    const cur=getProfiles(),tombs=getProfileTombstones();let added=0,updated=0,skipped=0,deleted=0;
    Object.entries(incomingTombstones).forEach(([name,mark])=>{
@@ -884,6 +1138,15 @@ function chgSet(id,delta){
  saveInputs();
  calc();
 }
+
+['postUse1','postUse2','postUse3'].forEach(id=>{const el=$(id);if(el)el.addEventListener('change',updatePostStintStates)});
+updatePostStintStates();
+if($('postUsePlan'))$('postUsePlan').addEventListener('click',postUseStrategyA);
+if($('postAnalyze'))$('postAnalyze').addEventListener('click',analyzePostRace);
+if($('postSaveLearn'))$('postSaveLearn').addEventListener('click',savePostRaceAndLearn);
+if($('postResetLearning'))$('postResetLearning').addEventListener('click',resetPostLearning);
+if($('postLearningEnabled'))$('postLearningEnabled').addEventListener('change',()=>{calc();renderLearningSummary()});
+
 const raceTimeInput=$('raceTime');if(raceTimeInput)raceTimeInput.addEventListener('input',calc);
 ['sr1','sr5','sr10','mr1','mr5','mr10','hr1','hr5','hr10'].forEach(id=>{
  const el=$(id);
@@ -895,6 +1158,12 @@ SAVE_IDS.forEach(id=>{
  if(!el)return;
  el.addEventListener('input',saveInputs);
  el.addEventListener('change',saveInputs);
+});
+
+const STRATEGY_INPUT_IDS=['race','raceTime','pit','sw','mw','hw','sr1','sr5','sr10','mr1','mr5','mr10','hr1','hr5','hr10'];
+STRATEGY_INPUT_IDS.forEach(id=>{
+ const el=$(id);if(!el)return;
+ el.addEventListener('change',calc);
 });
 
 
@@ -930,19 +1199,15 @@ if(profileSelect)profileSelect.addEventListener('change',()=>{
 });
 refreshProfileSelect();
 
-document.querySelectorAll('.setbtn').forEach(btn=>{
- btn.addEventListener('click',function(){
-  chgSet(this.dataset.target,parseInt(this.dataset.delta,10)||0);
- });
-});
 function tyre(p){
- const r1=parseLapTime($(p+'r1').value);
- const r5=parseLapTime($(p+'r5').value);
- const r10=parseLapTime($(p+'r10').value);
+ const base=baseTyreFromInputs(p),learn=getLearnedAdjustment(p);
+ if(!learn)return base;
+ const off=Number(learn.paceOffsetMs)||0,wearFactor=Number(learn.wearFactor)||1;
+ const r1=base.r1==null?null:base.r1+off,r5=base.r5==null?null:base.r5+off,r10=base.r10==null?null:base.r10+off;
  return{
-  name:p==='s'?'Soft':p==='m'?'Medium':'Hard',
-  wear:N(p+'w')/10,
-  sets:Math.max(0,Math.floor(N(p+'s'))),
+  name:base.name,
+  wear:base.wear*wearFactor,
+  sets:base.sets,
   r1,r5,r10,
   fast:r1,
   slow:r10,
@@ -1000,6 +1265,10 @@ function wearPreference(endWears){
  return {tier,deviation,over70,over80};
 }
 function strategyCompare(a,b){
+ // Reifenabnutzung bleibt ein zentraler Teil der Strategieauswahl:
+ // 60–70 % am Stintende wird bevorzugt, >70 % wird zunehmend vermieden,
+ // >80 % nur wenn nötig. Innerhalb derselben Verschleißklasse gewinnt die
+ // schnellere Gesamtzeit.
  const pa=a.pref, pb=b.pref;
  return pa.tier-pb.tier
    || pa.over80-pb.over80
@@ -1031,12 +1300,12 @@ function setsNeeded(seq){
 function enoughSets(seq,T){
  const n=setsNeeded(seq); return n.every((v,i)=>v<=T[i].sets);
 }
-function strategyLabel(i){return i===0?'Strategie A · Schnellste':i===1?'Strategie B · Alternative':'Strategie C · Sicher'}
+function strategyLabel(i){return i===0?'Strategie A · Empfohlen':i===1?'Strategie B · Alternative':'Strategie C · Sicher'}
 function strategyClass(i){return i===0?'A':i===1?'B':'C'}
 
 
 function strategyDeltaText(x,best){
- if(!best || x===best)return 'Schnellste Strategie';
+ if(!best || x===best)return 'Empfohlene Strategie';
  const d=x.total-best.total;
  return '+'+formatRaceTime(d)+' gegenüber Strategie A';
 }
@@ -1197,6 +1466,15 @@ function calc(){
  const R=Math.max(5,Math.round(N('race'))),L=100,P=N('pit');
  const raceDuration=parseTime($('raceTime').value);
  const T=[tyre('s'),tyre('m'),tyre('h')],lev=[80,100];
+ const tyreDataValid=T.every(t=>t.r1!=null&&t.r5!=null&&t.r10!=null&&Number.isFinite(t.wear)&&t.wear>0);
+ if(!tyreDataValid){
+   const cards=$('strategyCards');
+   if(cards)cards.innerHTML='<div class="strat"><h3>⚠️ Reifendaten prüfen</h3><div class="muted">Für Soft, Medium und Hard müssen gültige R1/R5/R10-Zeiten sowie eine Abnutzung größer 0 % eingetragen sein.</div></div>';
+   LAB_STRATEGIES=[];
+   renderCommandCenter();
+   updateSCCalculator();
+   return;
+ }
 
  // Chart
  const c=$('chart'),ctx=c.getContext('2d'),d=devicePixelRatio||1,w=c.clientWidth,h=430;
@@ -1346,6 +1624,7 @@ const drawPaceCharts=()=>{
  }
 
  renderCommandCenter();
+ updateSCCalculator();
 }
 
 
@@ -1448,6 +1727,147 @@ tyreCanvas.addEventListener('pointerleave',e=>{
   if(e.pointerType==='mouse') hideChartTip();
 });
 
+
+function scUsedSetsBeforeLap(x,lap){
+ const used=[0,0,0];
+ let start=1;
+ for(let i=0;i<x.seq.length;i++){
+   const end=i<x.pits.length?x.pits[i]:Math.max(1,Math.round(N('race')));
+   if(lap>=start){
+     used[x.seq[i]]++;
+     if(lap<=end)break;
+   }
+   start=end+1;
+ }
+ return used;
+}
+function scCurrentStint(x,lap,R){
+ let start=1;
+ for(let i=0;i<x.seq.length;i++){
+   const end=i<x.pits.length?x.pits[i]:R;
+   if(lap>=start && lap<=end)return {index:i,compound:x.seq[i],start,end,age:lap-start+1};
+   start=end+1;
+ }
+ return null;
+}
+function scSequenceTime(seq,lens,T,firstPitCost,normalPitCost){
+ let total=firstPitCost*1000;
+ for(let i=0;i<seq.length;i++){
+   if(lens[i]<1 || wearAt(T[seq[i]],lens[i])>100)return Infinity;
+   total+=stintTime(T[seq[i]],lens[i]);
+   if(i>0) total+=normalPitCost*1000;
+ }
+ return total;
+}
+function scRemainingSetCheck(seq,available){
+ const need=[0,0,0]; seq.forEach(c=>need[c]++);
+ return need.every((v,i)=>v<=available[i]);
+}
+function scOptimizePitNow(base,lap,R,T,scLoss,normalLoss,maxExtraStops){
+ const rem=R-lap;
+ if(rem<=0)return null;
+ const used=scUsedSetsBeforeLap(base,lap);
+ const available=T.map((t,i)=>Math.max(0,t.sets-used[i]));
+ const usedCompounds=new Set();
+ let start=1;
+ for(let i=0;i<base.seq.length;i++){
+   const end=i<base.pits.length?base.pits[i]:R;
+   if(start<=lap)usedCompounds.add(base.seq[i]);
+   if(lap<=end)break;
+   start=end+1;
+ }
+ let best=null;
+ const consider=(seq,lens)=>{
+   if(!scRemainingSetCheck(seq,available))return;
+   const all=new Set([...usedCompounds,...seq]);
+   if(all.size<2)return;
+   const time=scSequenceTime(seq,lens,T,scLoss,normalLoss);
+   if(!Number.isFinite(time))return;
+   const maxWear=Math.max(...seq.map((c,i)=>wearAt(T[c],lens[i])));
+   const cand={seq,lens,time,maxWear,extraStops:seq.length-1};
+   if(!best || time<best.time || (time===best.time && maxWear<best.maxWear))best=cand;
+ };
+ for(let a=0;a<3;a++)consider([a],[rem]);
+ if(maxExtraStops>=1){
+   for(let a=0;a<3;a++)for(let b=0;b<3;b++)for(let l1=1;l1<rem;l1++)consider([a,b],[l1,rem-l1]);
+ }
+ if(maxExtraStops>=2){
+   for(let a=0;a<3;a++)for(let b=0;b<3;b++)for(let c=0;c<3;c++){
+     for(let l1=1;l1<rem-1;l1++)for(let l2=1;l2<rem-l1;l2++)consider([a,b,c],[l1,l2,rem-l1-l2]);
+   }
+ }
+ return best;
+}
+function scStayOutTime(base,lap,R,T,normalLoss){
+ const cur=scCurrentStint(base,lap,R);
+ if(!cur)return Infinity;
+ let total=0;
+ // Time from the lap after the SC lap to the end of the current stint.
+ const remainingCurrent=Math.max(0,cur.end-lap);
+ for(let k=1;k<=remainingCurrent;k++){
+   const lt=lapTimeAtStintLap(T[cur.compound],cur.age+k);
+   if(lt==null)return Infinity;
+   total+=lt;
+ }
+ // Then follow the original plan.
+ for(let i=cur.index+1;i<base.seq.length;i++){
+   total+=normalLoss*1000;
+   const s=i===0?1:base.pits[i-1]+1;
+   const e=i<base.pits.length?base.pits[i]:R;
+   const len=e-s+1;
+   if(wearAt(T[base.seq[i]],len)>100)return Infinity;
+   total+=stintTime(T[base.seq[i]],len);
+ }
+ return total;
+}
+function scPlanText(best,lap,T){
+ if(!best)return 'Keine fahrbare SC-Alternative mit den verfügbaren Reifensätzen gefunden.';
+ let r=lap+1,parts=[];
+ best.seq.forEach((c,i)=>{
+   const end=r+best.lens[i]-1;
+   parts.push(compoundLabel(T[c].name)+' R'+r+'–'+end);
+   r=end+1;
+ });
+ return '<b>SC-Plan:</b> BOX Ende R'+lap+' → '+parts.join(' → ')+' · Max. Verschleiß '+best.maxWear.toFixed(1)+' %';
+}
+function updateSCCalculator(){
+ const headline=$('scHeadline'); if(!headline)return;
+ const base=LAB_STRATEGIES[Math.max(0,Math.min(LAB_STRATEGIES.length-1,parseInt($('scBase').value||'0',10)))];
+ const R=Math.max(5,Math.round(N('race'))),lap=Math.max(1,Math.min(R,Math.round(Number($('scLap').value||1))));
+ $('scLap').max=R; $('scLap').value=lap;
+ if(!base){
+   headline.textContent='–';$('scReason').textContent='Noch keine gültige Strategie verfügbar.';$('scPlan').textContent='–';return;
+ }
+ const T=[tyre('s'),tyre('m'),tyre('h')],cur=scCurrentStint(base,lap,R);
+ if(!cur){
+   headline.textContent='–';$('scReason').textContent='SC-Runde liegt außerhalb der gewählten Strategie.';return;
+ }
+ const scLoss=Math.max(0,Number($('scPitLoss').value||0));
+ const normalLoss=N('pit'),maxExtra=Math.max(0,Math.min(2,parseInt($('scMaxStops').value||'1',10)));
+ const pit=scOptimizePitNow(base,lap,R,T,scLoss,normalLoss,maxExtra);
+ const stay=scStayOutTime(base,lap,R,T,normalLoss);
+ $('scCurrentTyre').textContent=compoundLabel(T[cur.compound].name);
+ $('scTyreAge').textContent=cur.age+' R · '+wearAt(T[cur.compound],cur.age).toFixed(1)+' %';
+ if(!pit || !Number.isFinite(stay)){
+   headline.textContent='WEITERFAHREN';
+   $('scBadge').className='scbadge stay';$('scBadge').textContent='STAY OUT';
+   $('scAdvantage').textContent='–';
+   $('scReason').textContent='Kein gültiger sofortiger Boxenstopp wurde gefunden.';
+   $('scPlan').textContent='Originalstrategie weiterfahren.';
+   return;
+ }
+ const delta=stay-pit.time;
+ const pitNow=delta>0;
+ headline.textContent=pitNow?'JETZT BOXENSTOPP':'DRAUSSEN BLEIBEN';
+ $('scBadge').className='scbadge '+(pitNow?'pit':'stay');
+ $('scBadge').textContent=pitNow?'PIT NOW':'STAY OUT';
+ $('scAdvantage').textContent=(Math.abs(delta)/1000).toFixed(1).replace('.',',')+' s';
+ $('scReason').textContent=pitNow
+   ?'Der reduzierte Zeitverlust unter Safety Car macht den sofortigen Stopp rechnerisch schneller als die aktuelle Planung.'
+   :'Die aktuelle Reifenposition ist trotz Safety Car rechnerisch günstiger als ein sofortiger Stopp.';
+ $('scPlan').innerHTML=pitNow?scPlanText(pit,lap,T):'<b>Plan:</b> Aktuelle Strategie fortsetzen. Nächster geplanter Stopp: '+(base.pits.find(p=>p>lap)?'R'+base.pits.find(p=>p>lap):'kein weiterer Stopp')+'.';
+}
+
 let LAB_STRATEGIES=[];
 function labSetFromBase(){
  if(!LAB_STRATEGIES.length)return;
@@ -1480,6 +1900,9 @@ function updateStrategyLab(){
 function labStep(id,d){const el=$(id),R=Math.max(5,Math.round(N('race')));let v=Math.floor(Number(el.value||0))+d;v=Math.max(1,Math.min(R-1,v));el.value=v;updateStrategyLab()}
 
 
+['scLap','scBase','scPitLoss','scMaxStops'].forEach(id=>$(id).addEventListener('input',updateSCCalculator));
+$('scBase').addEventListener('change',updateSCCalculator);
+
 $('labBase').addEventListener('change',labSetFromBase);
 ['labTyre1','labTyre2','labTyre3','labPit1','labPit2'].forEach(id=>$(id).addEventListener('input',updateStrategyLab));
 $('labPit1Minus').addEventListener('click',()=>labStep('labPit1',-1));$('labPit1Plus').addEventListener('click',()=>labStep('labPit1',1));
@@ -1488,10 +1911,411 @@ $('labPit2Minus').addEventListener('click',()=>labStep('labPit2',-1));$('labPit2
 
 const PROFILE_HISTORY_KEY='f1_strategy_profile_history_v1';
 const PROFILE_HISTORY_DELETED_KEY='f1_strategy_profile_history_deleted_v1';
+const POST_RACE_KEY='f1_strategy_post_race_v1';
+const LEARNING_KEY='f1_strategy_learning_v1';
+
 function getProfileHistory(){try{const d=JSON.parse(localStorage.getItem(PROFILE_HISTORY_KEY)||'{}');return d&&typeof d==='object'?d:{}}catch(e){return {}}}
 function setProfileHistory(d){try{localStorage.setItem(PROFILE_HISTORY_KEY,JSON.stringify(d||{}))}catch(e){}}
 function getDeletedHistory(){try{const d=JSON.parse(localStorage.getItem(PROFILE_HISTORY_DELETED_KEY)||'{}');return d&&typeof d==='object'?d:{}}catch(e){return {}}}
 function setDeletedHistory(d){try{localStorage.setItem(PROFILE_HISTORY_DELETED_KEY,JSON.stringify(d||{}))}catch(e){}}
+
+
+const SETUP_FIELDS=[
+ ['setupFrontWing','Frontflügel',1],['setupRearWing','Heckflügel',1],
+ ['setupDiffOn','On-Throttle Differential',1],['setupDiffOff','Off-Throttle Differential',1],
+ ['setupCamberF','Front Camber',.05],['setupCamberR','Rear Camber',.05],
+ ['setupToeF','Front Toe',.01],['setupToeR','Rear Toe',.01],
+ ['setupSuspF','Front Suspension',1],['setupSuspR','Rear Suspension',1],
+ ['setupArbF','Front ARB',1],['setupArbR','Rear ARB',1],
+ ['setupRideF','Front Ride Height',1],['setupRideR','Rear Ride Height',1],
+ ['setupBrakePressure','Brake Pressure',1],['setupBrakeBias','Front Brake Bias',1],
+ ['setupPressureFL','Front Left Pressure',.1],['setupPressureFR','Front Right Pressure',.1],
+ ['setupPressureRL','Rear Left Pressure',.1],['setupPressureRR','Rear Right Pressure',.1]
+];
+function collectSetup(){
+ const values={};
+ SETUP_FIELDS.forEach(([id])=>{const el=$(id),v=el?Number(el.value):NaN;if(Number.isFinite(v))values[id]=v});
+ return {values,feedback:$('setupFeedback')?$('setupFeedback').value:'',note:$('setupNote')?$('setupNote').value.trim():''};
+}
+function setupMetricFromRace(r){
+ return r&&Number.isFinite(Number(r.score))?Number(r.score):null;
+}
+function setupEvidenceForField(field){
+ const data=getPostRaceData(); let votes=0,weighted=0,tracks=0,pairCount=0;
+ Object.entries(data).forEach(([name,races])=>{
+   const arr=(races||[]).filter(r=>r&&r.setup&&r.setup.values&&Number.isFinite(Number(r.setup.values[field]))&&setupMetricFromRace(r)!=null);
+   if(arr.length<2)return;
+   let trackVotes=0,trackWeight=0;
+   for(let i=0;i<arr.length;i++)for(let j=i+1;j<arr.length;j++){
+     const a=arr[i],b=arr[j],dx=Number(b.setup.values[field])-Number(a.setup.values[field]),dy=setupMetricFromRace(b)-setupMetricFromRace(a);
+     if(Math.abs(dx)<1e-9||Math.abs(dy)<3)continue;
+     const w=Math.min(3,Math.abs(dy)/5);
+     trackVotes+=Math.sign(dx*dy)*w;trackWeight+=w;pairCount++;
+   }
+   if(trackWeight){weighted+=trackVotes;votes+=trackWeight;tracks++}
+ });
+ if(!votes)return {direction:0,strength:0,tracks:0,pairs:0};
+ return {direction:Math.sign(weighted),strength:Math.abs(weighted)/votes,tracks,pairs:pairCount};
+}
+function setupFeedbackHints(){
+ const f=$('setupFeedback')?$('setupFeedback').value:'';
+ if(f==='understeer')return [
+   ['setupFrontWing',1,'Mehr Frontflügel testen, um die Vorderachse zu stärken.'],
+   ['setupArbF',-1,'Front-ARB etwas weicher testen, wenn mechanischer Frontgrip fehlt.']
+ ];
+ if(f==='oversteer')return [
+   ['setupRearWing',1,'Mehr Heckflügel testen, um das Heck zu stabilisieren.'],
+   ['setupArbR',-1,'Rear-ARB etwas weicher testen, um die Hinterachse ruhiger zu machen.']
+ ];
+ if(f==='traction')return [
+   ['setupDiffOn',-2,'On-Throttle-Differential etwas öffnen und Traktion prüfen.'],
+   ['setupSuspR',-1,'Hinteres Fahrwerk etwas weicher testen.']
+ ];
+ if(f==='straight')return [
+   ['setupRearWing',-1,'Weniger Heckflügel als Topspeed-Test versuchen.'],
+   ['setupFrontWing',-1,'Frontflügel nur gemeinsam mit der Balance prüfen.']
+ ];
+ if(f==='tyres')return [
+   ['setupPressureFL',-.1,'Vorderen Reifendruck leicht reduzieren und Temperatur beobachten.'],
+   ['setupPressureRL',-.1,'Hinteren Reifendruck leicht reduzieren und Temperatur beobachten.']
+ ];
+ return [];
+}
+function formatSetupNumber(v,step){
+ const dec=step<.1?2:step<1?1:0;return Number(v).toFixed(dec).replace('.',',');
+}
+function analyzeSetup(){
+ const out=$('setupRecommendations'),badge=$('setupEvidence');
+ if(!out||!badge)return;
+ const recs=[],current=collectSetup().values;
+ SETUP_FIELDS.forEach(([id,label,step])=>{
+   const ev=setupEvidenceForField(id);
+   if(ev.strength>=.58&&ev.tracks>=1&&ev.pairs>=2){
+     const cur=Number(current[id]),dir=ev.direction;
+     if(Number.isFinite(cur))recs.push({
+       level:(ev.strength>=.72&&ev.pairs>=4)?'high':'medium',
+       field:id,
+       text:label+': '+(dir>0?'erhöhen':'reduzieren')+' → nächsten Test bei ca. '+formatSetupNumber(cur+dir*step,step)+'.',
+       detail:'Datenmuster aus '+ev.pairs+' Vergleich'+(ev.pairs===1?'':'en')+' auf '+ev.tracks+' Strecke'+(ev.tracks===1?'':'n')+'.'
+     });
+   }
+ });
+ setupFeedbackHints().forEach(([id,delta,text])=>{
+   if(!recs.some(r=>r.field===id))recs.push({level:'test',field:id,text,detail:'Aus deinem Fahrgefühl abgeleiteter Testvorschlag, noch nicht statistisch bestätigt.'});
+ });
+ const rank={high:0,medium:1,test:2};
+ recs.sort((a,b)=>rank[a.level]-rank[b.level]);
+ const top=recs.slice(0,4);
+ if(!top.length){
+   out.innerHTML='Noch keine belastbare Richtung erkennbar. Speichere mehrere Race-Debriefs mit unterschiedlichen Setups auf derselben Strecke.';
+   badge.className='setupconfidence test';badge.textContent='TESTVORSCHLAG';
+ }else{
+   out.innerHTML=top.map(r=>'<div class="setuprec"><strong>'+r.text+'</strong><span class="small">'+r.detail+'</span></div>').join('');
+   const best=top[0].level;
+   badge.className='setupconfidence '+best;
+   badge.textContent=best==='high'?'STARKE EVIDENZ':best==='medium'?'TENDENZ':'TESTVORSCHLAG';
+ }
+ renderSetupLearningSummary();
+}
+function renderSetupLearningSummary(){
+ const el=$('setupLearningSummary');if(!el)return;
+ const data=getPostRaceData(),name=postRaceProfileName();
+ const total=Object.values(data).reduce((n,a)=>n+(a||[]).filter(r=>r&&r.setup).length,0);
+ const local=name?(data[name]||[]).filter(r=>r&&r.setup).length:0;
+ const tracks=Object.values(data).filter(a=>(a||[]).some(r=>r&&r.setup)).length;
+ el.textContent='Setup Learning: '+total+' Setup-Rennen · '+tracks+' Strecke'+(tracks===1?'':'n')+(name?' · '+local+' lokale Vergleichsdaten für „'+name+'“':'')+'. Empfehlungen werden aus wiederholten Änderungen gelernt; einzelne Runs erzeugen keine starke Empfehlung.';
+}
+
+if($('setupAnalyzeBtn'))$('setupAnalyzeBtn').addEventListener('click',analyzeSetup);
+if($('setupFeedback'))$('setupFeedback').addEventListener('change',analyzeSetup);
+SETUP_FIELDS.forEach(([id])=>{
+ const el=$(id);
+ if(el)el.addEventListener('change',()=>{saveInputs();analyzeSetup()});
+});
+
+function postRaceProfileName(){
+ return (($('profileSelect')&&$('profileSelect').value)||($('profileName')&&$('profileName').value)||'').trim();
+}
+function getPostRaceData(){try{const d=JSON.parse(localStorage.getItem(POST_RACE_KEY)||'{}');return d&&typeof d==='object'?d:{}}catch(e){return {}}}
+function setPostRaceData(d){try{localStorage.setItem(POST_RACE_KEY,JSON.stringify(d||{}))}catch(e){}}
+function getLearningData(){try{const d=JSON.parse(localStorage.getItem(LEARNING_KEY)||'{}');return d&&typeof d==='object'?d:{}}catch(e){return {}}}
+function setLearningData(d){try{localStorage.setItem(LEARNING_KEY,JSON.stringify(d||{}))}catch(e){}}
+function mergePostRaceData(a,b){
+ const out={}; const names=new Set([...Object.keys(a||{}),...Object.keys(b||{})]);
+ names.forEach(name=>{
+   const map={};
+   [...(a[name]||[]),...(b[name]||[])].forEach(r=>{if(r&&r.id){const o=map[r.id];if(!o||Date.parse(r.createdAt||0)>=Date.parse(o.createdAt||0))map[r.id]=r}});
+   const arr=Object.values(map).sort((x,y)=>Date.parse(x.createdAt)-Date.parse(y.createdAt)); if(arr.length)out[name]=arr;
+ });
+ return out;
+}
+function mergeLearningData(a,b){
+ const out={}; const names=new Set([...Object.keys(a||{}),...Object.keys(b||{})]);
+ names.forEach(name=>{
+   const x=a&&a[name],y=b&&b[name],xt=Date.parse((x&&x.updatedAt)||0)||0,yt=Date.parse((y&&y.updatedAt)||0)||0;
+   if(yt>xt)out[name]=y; else if(x)out[name]=x; else if(y)out[name]=y;
+ });
+ return out;
+}
+function learningActive(){
+ return !$('postLearningEnabled') || $('postLearningEnabled').value!=='0';
+}
+
+function globalLearningStats(excludeName=''){
+ const data=getLearningData(),post=getPostRaceData();
+ const compounds={s:{paceSum:0,paceN:0,wearSum:0,wearN:0},m:{paceSum:0,paceN:0,wearSum:0,wearN:0},h:{paceSum:0,paceN:0,wearSum:0,wearN:0}};
+ let tracks=0,races=0;
+ Object.keys(data).forEach(name=>{
+   const model=data[name];
+   if(!model||!model.compounds)return;
+   if(name!==excludeName)tracks++;
+   if(name!==excludeName)races+=(post[name]||[]).length;
+   if(name===excludeName)return;
+   ['s','m','h'].forEach(p=>{
+     const c=model.compounds[p]; if(!c)return;
+     const pn=Math.max(0,Number(c.paceCount)||0),wn=Math.max(0,Number(c.wearCount)||0);
+     if(pn){compounds[p].paceSum+=(Number(c.paceOffsetMs)||0)*pn;compounds[p].paceN+=pn}
+     if(wn){compounds[p].wearSum+=(Number(c.wearFactor)||1)*wn;compounds[p].wearN+=wn}
+   });
+ });
+ const result={tracks,races,compounds:{}};
+ ['s','m','h'].forEach(p=>{
+   const c=compounds[p];
+   result.compounds[p]={
+     paceOffsetMs:c.paceN?c.paceSum/c.paceN:0,
+     wearFactor:c.wearN?c.wearSum/c.wearN:1,
+     paceCount:c.paceN,
+     wearCount:c.wearN
+   };
+ });
+ return result;
+}
+function effectiveLearningForCompound(p){
+ if(!learningActive())return null;
+ const name=postRaceProfileName(),data=getLearningData();
+ const local=name&&data[name]&&data[name].compounds&&data[name].compounds[p] ? data[name].compounds[p] : null;
+ const global=globalLearningStats(name).compounds[p];
+
+ const lp=Math.max(0,Number(local&&local.paceCount)||0),lw=Math.max(0,Number(local&&local.wearCount)||0);
+ const gp=Math.max(0,Number(global&&global.paceCount)||0),gw=Math.max(0,Number(global&&global.wearCount)||0);
+
+ // Cross-track knowledge starts cautiously and tops out at 45% influence.
+ // Local evidence takes over progressively as races are completed on this track.
+ const globalPaceWeight=gp?Math.min(.45,.12+gp*.025):0;
+ const globalWearWeight=gw?Math.min(.45,.12+gw*.025):0;
+ const localPaceWeight=lp?Math.min(.90,.30+lp*.12):0;
+ const localWearWeight=lw?Math.min(.90,.30+lw*.12):0;
+
+ const globalPace=(Number(global&&global.paceOffsetMs)||0)*globalPaceWeight;
+ const globalWearDelta=((Number(global&&global.wearFactor)||1)-1)*globalWearWeight;
+ const localPace=local?(Number(local.paceOffsetMs)||0):0;
+ const localWearDelta=local?((Number(local.wearFactor)||1)-1):0;
+
+ const paceOffsetMs=local
+   ? localPace*localPaceWeight + globalPace*(1-localPaceWeight)
+   : globalPace;
+ const wearDelta=local
+   ? localWearDelta*localWearWeight + globalWearDelta*(1-localWearWeight)
+   : globalWearDelta;
+
+ if(!local && !gp && !gw)return null;
+ return {
+   paceOffsetMs:Math.max(-3000,Math.min(3000,paceOffsetMs)),
+   wearFactor:Math.max(.65,Math.min(1.45,1+wearDelta)),
+   localPaceCount:lp,localWearCount:lw,
+   globalPaceCount:gp,globalWearCount:gw,
+   source:local?'global+lokal':'global'
+ };
+}
+function renderGlobalLearningSummary(){
+ const el=$('postGlobalLearningSummary'); if(!el)return;
+ const name=postRaceProfileName(),g=globalLearningStats(name);
+ const allPost=getPostRaceData(),allLearning=getLearningData();
+ const totalRaces=Object.values(allPost).reduce((n,a)=>n+(Array.isArray(a)?a.length:0),0);
+ const totalTracks=Object.keys(allLearning).filter(k=>allLearning[k]&&allLearning[k].compounds).length;
+ const transferableRaces=g.races,transferableTracks=g.tracks;
+ const evidence=['s','m','h'].reduce((n,p)=>n+Math.max(g.compounds[p].paceCount||0,g.compounds[p].wearCount||0),0);
+ const conf=evidence>=18?'hoch':evidence>=7?'mittel':evidence>0?'niedrig':'noch keine';
+ if(!totalTracks){
+   el.innerHTML='<b>Global Learning:</b> Noch keine streckenübergreifenden Daten vorhanden.';
+   return;
+ }
+ el.innerHTML='<b>Global Learning:</b> '+totalRaces+' Rennen · '+totalTracks+' Strecke'+(totalTracks===1?'':'n')+
+   ' gespeichert. Für '+(name?'diese Strecke':'neue Strecken')+' stehen '+transferableRaces+' Rennen von '+transferableTracks+
+   ' anderen Strecke'+(transferableTracks===1?'':'n')+' als Transferwissen bereit · Konfidenz '+conf+'.';
+}
+
+function getLearnedAdjustment(p){
+ return effectiveLearningForCompound(p);
+}
+function baseTyreFromInputs(p){
+ const r1=parseLapTime($(p+'r1').value),r5=parseLapTime($(p+'r5').value),r10=parseLapTime($(p+'r10').value);
+ return{
+   name:p==='s'?'Soft':p==='m'?'Medium':'Hard',
+   wear:N(p+'w')/10,sets:Math.max(0,Math.floor(N(p+'s'))),
+   r1,r5,r10,fast:r1,slow:r10,
+   avg:(r1!=null&&r5!=null&&r10!=null)?(r1+r5+r10)/3:null
+ };
+}
+function renderLearningSummary(){
+ const el=$('postLearningSummary'); if(!el)return;
+ const name=postRaceProfileName(),d=getLearningData(),model=name&&d[name];
+ const parts=[],labels={s:'🔴 Soft',m:'🟡 Medium',h:'⚪ Hard'};
+ ['s','m','h'].forEach(p=>{
+   const eff=effectiveLearningForCompound(p); if(!eff)return;
+   const localN=Math.max(eff.localPaceCount||0,eff.localWearCount||0),globalN=Math.max(eff.globalPaceCount||0,eff.globalWearCount||0);
+   const conf=localN>=5?'hoch':localN>=2?'mittel':globalN>=8?'global mittel':'global niedrig';
+   const pace=(eff.paceOffsetMs||0)/1000,wear=(eff.wearFactor||1);
+   parts.push('<div class="postlearnrow"><b>'+labels[p]+'</b><span>Effektiv: Pace '+(pace>=0?'+':'')+pace.toFixed(2).replace('.',',')+' s · Wear ×'+wear.toFixed(2).replace('.',',')+'</span><span>'+conf+'</span></div>');
+ });
+ if(!name){
+   el.innerHTML=parts.length?'<b>Neue Strecke · globales Startmodell</b>'+parts.join(''):'Bitte zuerst ein Streckenprofil wählen.';
+ }else if(!model||!model.compounds){
+   el.innerHTML=parts.length?'<b>Noch keine lokalen Renndaten · globales Startmodell</b>'+parts.join(''):'Noch keine verwertbaren Lerndaten.';
+ }else{
+   el.innerHTML='<b>Global + lokal kombiniert</b>'+parts.join('');
+ }
+ renderGlobalLearningSummary();
+}
+function renderPostHistory(){
+ const el=$('postHistory'); if(!el)return;
+ const name=postRaceProfileName(),arr=(getPostRaceData()[name]||[]).slice().sort((a,b)=>Date.parse(b.createdAt)-Date.parse(a.createdAt));
+ if(!name){el.textContent='Bitte zuerst ein Streckenprofil wählen.';return}
+ if(!arr.length){el.textContent='Noch keine Rennen für „'+name+'“ gespeichert.';return}
+ const last=arr.slice(0,3).map(r=>new Date(r.createdAt).toLocaleDateString('de-DE')+' · Score '+(r.score==null?'–':Math.round(r.score)+'/100')+(r.setup?' · Setup ✓':''));
+ el.innerHTML='<b>'+arr.length+' Race-Debrief'+(arr.length===1?'':'s')+'</b><br>'+last.join('<br>');
+}
+function postReadStints(){
+ const R=Math.max(5,Math.round(N('race'))),out=[]; let prev=0;
+ for(let i=1;i<=3;i++){
+   const use=$('postUse'+i);
+   if(use && !use.checked)continue;
+   const endRaw=String($('postEnd'+i).value||'').trim();
+   if(!endRaw)return {error:'Für jeden angehakten Stint muss eine Endrunde eingetragen sein.'};
+   const end=Math.round(Number(endRaw)); if(!Number.isFinite(end)||end<=prev||end>R)return {error:'Stintenden müssen aufsteigend zwischen Runde 1 und '+R+' liegen.'};
+   const p=$('postTyre'+i).value, wearRaw=String($('postWear'+i).value||'').trim(), paceRaw=String($('postPace'+i).value||'').trim();
+   const actualWear=wearRaw===''?null:Number(wearRaw),actualAvg=paceRaw===''?null:parseLapTime(paceRaw);
+   if(actualWear!=null&&(!Number.isFinite(actualWear)||actualWear<0||actualWear>100))return {error:'Endverschleiß muss zwischen 0 und 100 % liegen.'};
+   if(paceRaw!==''&&actualAvg==null)return {error:'Bitte Ø Rundenzeiten im Format 1:24,300 eingeben.'};
+   out.push({p,start:prev+1,end,len:end-prev,actualWear,actualAvg}); prev=end;
+ }
+ if(!out.length)return {error:'Bitte mindestens einen Stint anhaken.'};
+ if(out[out.length-1].end!==R)return {error:'Der letzte berücksichtigte Stint muss in Runde '+R+' enden.'};
+ return {stints:out};
+}
+function updatePostStintStates(){
+ for(let i=1;i<=3;i++){
+   const use=$('postUse'+i),wrap=$('postStintWrap'+i);
+   if(wrap&&use)wrap.classList.toggle('inactive',!use.checked);
+ }
+}
+function postPredictedAvg(t,len){
+ if(!t||len<1)return null; const total=stintTime(t,len); return Number.isFinite(total)?total/len:null;
+}
+function postStrategyModelTime(stints,T){
+ let total=0; const P=N('pit');
+ for(let i=0;i<stints.length;i++){
+   const c=stints[i].p==='s'?0:stints[i].p==='m'?1:2,t=T[c];
+   if(wearAt(t,stints[i].len)>100)return Infinity;
+   total+=stintTime(t,stints[i].len);
+   if(i<stints.length-1)total+=P*1000;
+ }
+ return total;
+}
+function analyzePostRace(){
+ const res=postReadStints(),find=$('postFindings');
+ if(res.error){
+   $('postScore').textContent='–';$('postVerdict').textContent=res.error;find.textContent='Eingaben prüfen.';return null;
+ }
+ const stints=res.stints,T=[tyre('s'),tyre('m'),tyre('h')],best=LAB_STRATEGIES[0]||null;
+ const modeled=postStrategyModelTime(stints,T),strategyLoss=best&&Number.isFinite(modeled)?modeled-best.total:null;
+ let tyrePenalty=0,accuracyPenalty=0,accuracyN=0,notes=[];
+ stints.forEach((s,i)=>{
+   const c=s.p==='s'?0:s.p==='m'?1:2,t=T[c],predWear=wearAt(t,s.len),predAvg=postPredictedAvg(t,s.len);
+   if(s.actualWear!=null){
+     tyrePenalty+=Math.abs(s.actualWear-65)*0.55+(s.actualWear>80?(s.actualWear-80)*1.4:0);
+     const e=Math.abs(s.actualWear-predWear);accuracyPenalty+=Math.min(30,e*1.5);accuracyN++;
+     if(e>=8)notes.push('Stint '+(i+1)+': Verschleißmodell liegt '+e.toFixed(1).replace('.',',')+' %-Punkte daneben.');
+   }else{
+     tyrePenalty+=Math.abs(predWear-65)*0.35;
+   }
+   if(s.actualAvg!=null&&predAvg!=null){
+     const e=Math.abs(s.actualAvg-predAvg)/1000; accuracyPenalty+=Math.min(35,e*12);accuracyN++;
+     if(e>=0.7)notes.push('Stint '+(i+1)+': reale Pace weicht um '+e.toFixed(2).replace('.',',')+' s/Runde vom Modell ab.');
+   }
+ });
+ const tyreScore=Math.max(0,Math.min(100,100-tyrePenalty/stints.length));
+ const modelScore=accuracyN?Math.max(0,Math.min(100,100-accuracyPenalty/accuracyN)):75;
+ const stratScore=strategyLoss==null?75:Math.max(0,Math.min(100,100-Math.max(0,strategyLoss)/1000*2.2));
+ const score=Math.round(stratScore*.45+tyreScore*.30+modelScore*.25);
+ $('postScore').textContent=score+'/100';
+ $('postTyreScore').textContent=Math.round(tyreScore)+'/100';
+ $('postModelScore').textContent=Math.round(modelScore)+'/100';
+ $('postStrategyLoss').textContent=strategyLoss==null?'–':((strategyLoss>=0?'+':'−')+(Math.abs(strategyLoss)/1000).toFixed(1).replace('.',',')+' s');
+ $('postVerdict').textContent=score>=90?'Sehr sauber umgesetzt.':score>=78?'Gute Basis mit kleinen Optimierungen.':score>=65?'Mehrere Punkte für das nächste Rennen gefunden.':'Deutliches Optimierungspotenzial.';
+ if(strategyLoss!=null){
+   if(strategyLoss>2500)notes.unshift('Strategiewahl/Stopprunden kosten modelliert etwa '+(strategyLoss/1000).toFixed(1).replace('.',',')+' s gegenüber Strategie A.');
+   else if(strategyLoss<=1000)notes.unshift('Die gefahrene Strategie liegt sehr nah am modellierten Optimum.');
+ }
+ if(!notes.length)notes.push('Keine auffällige Abweichung erkannt. Modell und gefahrene Stints passen gut zusammen.');
+ find.innerHTML='<b>Debrief:</b> '+notes.join(' ');
+ window.POST_LAST_ANALYSIS={score,tyreScore,modelScore,strategyLoss,modeled,stints};
+ return window.POST_LAST_ANALYSIS;
+}
+function learnFromPostRace(analysis){
+ const name=postRaceProfileName(); if(!name){$('postVerdict').textContent='Bitte zuerst ein Streckenprofil wählen, damit das Lernen streckenspezifisch bleibt.';return false}
+ if(!analysis)return false;
+ const all=getLearningData(),model=all[name]||{updatedAt:null,compounds:{}};
+ analysis.stints.forEach(s=>{
+   const base=baseTyreFromInputs(s.p),current=tyre(s.p),c=model.compounds[s.p]||{paceOffsetMs:0,wearFactor:1,paceCount:0,wearCount:0};
+   const predAvg=postPredictedAvg(current,s.len);
+   if(s.actualAvg!=null&&predAvg!=null){
+     const err=s.actualAvg-predAvg,alpha=Math.max(.12,Math.min(.35,1/((c.paceCount||0)+1)));
+     c.paceOffsetMs=Math.max(-3000,Math.min(3000,(c.paceOffsetMs||0)+err*alpha));
+     c.paceCount=(c.paceCount||0)+1;
+   }
+   const basePredWear=base.wear*s.len*(c.wearFactor||1);
+   if(s.actualWear!=null&&basePredWear>0){
+     const ratio=s.actualWear/basePredWear,alpha=Math.max(.12,Math.min(.30,1/((c.wearCount||0)+1)));
+     c.wearFactor=Math.max(.65,Math.min(1.45,(c.wearFactor||1)*(1+(ratio-1)*alpha)));
+     c.wearCount=(c.wearCount||0)+1;
+   }
+   model.compounds[s.p]=c;
+ });
+ model.updatedAt=new Date().toISOString(); all[name]=model; setLearningData(all); return true;
+}
+function savePostRaceAndLearn(){
+ const analysis=analyzePostRace(); if(!analysis)return;
+ const name=postRaceProfileName(); if(!name){$('postVerdict').textContent='Bitte zuerst ein Streckenprofil wählen.';return}
+ const all=getPostRaceData(); if(!all[name])all[name]=[];
+ const raceTime=parseTime($('postRaceTime').value);
+ const rec={id:'r_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),createdAt:new Date().toISOString(),score:analysis.score,raceTime,stints:analysis.stints,strategyLoss:analysis.strategyLoss,setup:collectSetup()};
+ all[name].push(rec); setPostRaceData(all);
+ if(learningActive())learnFromPostRace(analysis);
+ renderLearningSummary();renderPostHistory();renderSetupLearningSummary();analyzeSetup();calc();autoSyncDropbox();
+ $('postVerdict').textContent=learningActive()?'Race gespeichert · Lernmodell aktualisiert und Strategien neu berechnet.':'Race gespeichert · Lernmodell war deaktiviert.';
+}
+function postUseStrategyA(){
+ const x=LAB_STRATEGIES[0],R=Math.max(5,Math.round(N('race'))); if(!x)return;
+ const keys=['s','m','h']; let ends=[...x.pits,R];
+ for(let i=1;i<=3;i++){
+   const use=$('postUse'+i);
+   if(i<=x.seq.length){
+     if(use)use.checked=true;
+     $('postTyre'+i).value=keys[x.seq[i-1]];$('postEnd'+i).value=ends[i-1];
+   }else{
+     if(use)use.checked=false;
+     $('postEnd'+i).value='';$('postWear'+i).value='';$('postPace'+i).value='';
+   }
+ }
+ updatePostStintStates();
+}
+function resetPostLearning(){
+ const name=postRaceProfileName(); if(!name)return;
+ if(!confirm('Gelernte Reifendaten für „'+name+'“ zurücksetzen? Gespeicherte Race-Debriefs bleiben erhalten.'))return;
+ const d=getLearningData();delete d[name];setLearningData(d);renderLearningSummary();calc();
+}
+
 function historyProfileName(){return (($('profileSelect')&&$('profileSelect').value)||($('profileName')&&$('profileName').value)||'').trim()}
 function makeHistorySnapshot(){const values={};SAVE_IDS.forEach(id=>{const el=$(id);if(el)values[id]=el.value});return {id:'h_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),createdAt:new Date().toISOString(),values}}
 function mergeHistoryState(lh,ld,rh,rd){
@@ -1573,8 +2397,20 @@ function renderCommandCenter(){
 
 loadInputs();
 updateAllTyreTimes();
-calc();
+try{
+ calc();
+}catch(e){
+ console.error(e);
+ const title=$('commandTitle');
+ if(title)title.textContent='Berechnungsfehler · Eingaben prüfen';
+ const cards=$('strategyCards');
+ if(cards)cards.innerHTML='<div class="strat"><h3>⚠️ Berechnung konnte nicht abgeschlossen werden</h3><div class="muted">'+String(e&&e.message?e.message:e)+'</div></div>';
+}
 updateTrackSubtitle();
+renderLearningSummary();
+renderPostHistory();
+renderSetupLearningSummary();
+analyzeSetup();
 onresize=()=>{hideChartTip();calc();};
 
 </script>
