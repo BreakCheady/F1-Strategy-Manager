@@ -21,27 +21,35 @@ body{
 }
 .wrap{max-width:1500px;margin:auto}
 .apphead{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:2px 8px 16px;border-bottom:1px solid rgba(148,163,184,.22);margin-bottom:14px}
-.apphead-logo{padding-top:8px}
-.brand-logo{min-width:0;flex:1}
+.apphead-logo{
+ padding-top:8px;
+ display:grid;
+ grid-template-columns:1fr auto 1fr;
+ align-items:center;
+ gap:18px;
+}
+.brand-logo{min-width:0;justify-self:start}
 .header-logo{
  width:112px;height:112px;object-fit:contain;display:block;flex:0 0 auto;
  filter:drop-shadow(0 8px 18px rgba(0,0,0,.38));
 }
-.brand-copy{min-width:0}
-.brand-copy .tagline{font-size:14px;font-weight:750;color:#d3deec}
-.brand-copy .track-subtitle{margin-top:7px}
+.header-tagline{
+ justify-self:center;text-align:center;
+ font-size:14px;font-weight:750;color:#d3deec;
+ white-space:nowrap;
+}
+.apphead-logo .savepill{justify-self:end}
 @media(max-width:700px){
- .apphead-logo{align-items:flex-start;gap:10px}
+ .apphead-logo{grid-template-columns:auto 1fr auto;gap:10px}
  .header-logo{width:84px;height:84px}
- .brand-logo{align-items:center}
- .brand-copy .tagline{font-size:12px;line-height:1.35}
+ .header-tagline{font-size:12px;line-height:1.35;white-space:normal}
  .savepill{font-size:10px;padding:6px 9px}
 }
 @media(max-width:480px){
- .apphead-logo{flex-wrap:wrap}
- .brand-logo{width:100%}
+ .apphead-logo{grid-template-columns:auto 1fr;gap:10px 12px}
  .header-logo{width:76px;height:76px}
- .savepill{margin-left:88px}
+ .header-tagline{justify-self:center}
+ .apphead-logo .savepill{grid-column:2;justify-self:center}
 }
 
 .brand{display:flex;align-items:center;gap:12px}
@@ -314,11 +322,8 @@ table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}td,th{p
 <div class="apphead apphead-logo">
   <div class="brand brand-logo">
     <img class="header-logo" src="f1-strategy-manager-logo.png" alt="F1 Strategy Manager">
-    <div class="brand-copy">
-      <div class="tagline">Rennstrategie-Analyse · Schnell. Klar. Fundiert.</div>
-      <div class="track-subtitle" id="trackSubtitle">Race Strategy</div>
-    </div>
   </div>
+  <div class="header-tagline">Rennstrategie-Analyse · Schnell. Klar. Fundiert.</div>
   <div class="savepill">✓ Autospeichern aktiv</div>
 </div>
 
@@ -666,7 +671,7 @@ table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}td,th{p
 </div>
 
 <div class="card" style="padding:10px 14px;text-align:center">
-  <div class="small" style="font-weight:800;letter-spacing:.45px">F1 STRATEGY MANAGER · VERSION 1.77 (BETA)</div><div class="small" style="margin-top:4px">Made by BreakCheady</div>
+  <div class="small" style="font-weight:800;letter-spacing:.45px">F1 STRATEGY MANAGER · VERSION 1.78 (BETA)</div><div class="small" style="margin-top:4px">Made by BreakCheady</div>
 </div>
 
 </div>
